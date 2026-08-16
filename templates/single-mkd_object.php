@@ -158,53 +158,30 @@ while ( have_posts() ) :
 						<span class="badge bg-primary mb-4"><?php echo esc_html( $status_term->name ); ?></span>
 						<?php endif; ?>
 
-						<?php if ( $field_groups ) : ?>
-						<div class="accordion accordion-wrapper" id="cw-mc-characteristics">
-							<?php foreach ( $field_groups as $i => $group ) :
-								$is_first    = ( 0 === $i );
-								$heading_id  = 'cw-mc-heading-' . $i;
-								$collapse_id = 'cw-mc-collapse-' . $i;
-								?>
-								<div class="card plain accordion-item">
-									<div class="card-header" id="<?php echo esc_attr( $heading_id ); ?>">
-										<button class="accordion-button<?php echo $is_first ? '' : ' collapsed'; ?>"
-											data-bs-toggle="collapse"
-											data-bs-target="#<?php echo esc_attr( $collapse_id ); ?>"
-											aria-expanded="<?php echo $is_first ? 'true' : 'false'; ?>"
-											aria-controls="<?php echo esc_attr( $collapse_id ); ?>">
-											<?php echo esc_html( $group['label'] ); ?>
-										</button>
-									</div>
-									<div id="<?php echo esc_attr( $collapse_id ); ?>"
-										class="accordion-collapse collapse<?php echo $is_first ? ' show' : ''; ?>"
-										aria-labelledby="<?php echo esc_attr( $heading_id ); ?>"
-										data-bs-parent="#cw-mc-characteristics">
-										<div class="card-body">
-											<ul class="list-unstyled mb-0">
-												<?php foreach ( $group['rows'] as $row ) :
-													$is_contact = ( '_mkd_responsible_person' === $row['key'] && false !== strpos( $row['value'], ',' ) );
-													?>
-													<li class="d-flex justify-content-between border-bottom py-2 gap-3">
-														<span class="text-muted"><?php echo esc_html( $row['label'] ); ?></span>
-														<?php if ( $is_contact ) :
-															[ $person_name, $person_contact ] = array_map( 'trim', explode( ',', $row['value'], 2 ) );
-															?>
-															<strong class="text-end">
-																<?php echo esc_html( $person_name ); ?><br>
-																<span class="text-muted fw-normal"><?php echo esc_html( $person_contact ); ?></span>
-															</strong>
-														<?php else : ?>
-															<strong class="text-end"><?php echo esc_html( $row['value'] ); ?></strong>
-														<?php endif; ?>
-													</li>
-												<?php endforeach; ?>
-											</ul>
-										</div>
-									</div>
-								</div>
-							<?php endforeach; ?>
+						<?php foreach ( $field_groups as $i => $group ) : ?>
+						<div class="<?php echo 0 === $i ? '' : 'mt-4 '; ?>">
+							<h3 class="h6 text-uppercase text-muted mb-2"><?php echo esc_html( $group['label'] ); ?></h3>
+							<ul class="list-unstyled mb-0">
+								<?php foreach ( $group['rows'] as $row ) :
+									$is_contact = ( '_mkd_responsible_person' === $row['key'] && false !== strpos( $row['value'], ',' ) );
+									?>
+									<li class="d-flex justify-content-between border-bottom py-2 gap-3">
+										<span class="text-muted"><?php echo esc_html( $row['label'] ); ?></span>
+										<?php if ( $is_contact ) :
+											[ $person_name, $person_contact ] = array_map( 'trim', explode( ',', $row['value'], 2 ) );
+											?>
+											<strong class="text-end">
+												<?php echo esc_html( $person_name ); ?><br>
+												<span class="text-muted fw-normal"><?php echo esc_html( $person_contact ); ?></span>
+											</strong>
+										<?php else : ?>
+											<strong class="text-end"><?php echo esc_html( $row['value'] ); ?></strong>
+										<?php endif; ?>
+									</li>
+								<?php endforeach; ?>
+							</ul>
 						</div>
-						<?php endif; ?>
+						<?php endforeach; ?>
 
 					</div>
 				</aside>
