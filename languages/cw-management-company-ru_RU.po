@@ -1,0 +1,421 @@
+# Russian translation for CW Management Company
+# Copyright (C) 2026 CodeWeber
+# This file is distributed under the same license as the CW Management Company plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: CW Management Company 0.1.0\n"
+"PO-Revision-Date: 2026-08-16 00:00+0000\n"
+"Last-Translator: CodeWeber <admin@codeweber.ru>\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Domain: cw-management-company\n"
+
+msgid "CW Management Company"
+msgstr "CW Управляющая компания"
+
+msgid "Multi-apartment building objects, documents (work acts, annual reports, meeting minutes) and events for a management company website."
+msgstr "Объекты многоквартирных домов, документы (акты выполненных работ, годовые отчёты, протоколы собраний) и мероприятия для сайта управляющей компании."
+
+msgid "CodeWeber"
+msgstr "CodeWeber"
+
+msgid "Document Details"
+msgstr "Данные документа"
+
+msgid "Property"
+msgstr "Объект"
+
+msgid "— select property —"
+msgstr "— выберите объект —"
+
+msgid "File"
+msgstr "Файл"
+
+msgid "Select file"
+msgstr "Выбрать файл"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Date / Period"
+msgstr "Дата / период"
+
+msgid "Cost"
+msgstr "Стоимость"
+
+msgid "— Not linked —"
+msgstr "— Не привязано —"
+
+msgid "Link this event to a property — e.g. an owners meeting for a specific building."
+msgstr "Привяжите это мероприятие к объекту — например, собрание собственников конкретного дома."
+
+msgid "Address & Identification"
+msgstr "Адрес и идентификация"
+
+msgid "Technical Characteristics"
+msgstr "Технические характеристики"
+
+msgid "Management"
+msgstr "Управление"
+
+msgid "Address"
+msgstr "Адрес"
+
+msgid "Cadastral Number"
+msgstr "Кадастровый номер"
+
+msgid "GIS ZHKH Code"
+msgstr "Код ГИС ЖКХ"
+
+msgid "Panel"
+msgstr "Панельный"
+
+msgid "Brick"
+msgstr "Кирпичный"
+
+msgid "Monolith"
+msgstr "Монолитный"
+
+msgid "Block"
+msgstr "Блочный"
+
+msgid "Wood"
+msgstr "Деревянный"
+
+msgid "Other"
+msgstr "Другое"
+
+msgid "Central"
+msgstr "Централизованное"
+
+msgid "Autonomous"
+msgstr "Автономное"
+
+msgid "None"
+msgstr "Отсутствует"
+
+msgid "Bottled"
+msgstr "Баллонный газ"
+
+msgid "Natural"
+msgstr "Естественная"
+
+msgid "Supply & Exhaust"
+msgstr "Приточно-вытяжная"
+
+msgid "Year Built"
+msgstr "Год постройки"
+
+msgid "Wall Material"
+msgstr "Материал стен"
+
+msgid "Building Series"
+msgstr "Серия дома"
+
+msgid "Floors"
+msgstr "Этажность"
+
+msgid "Entrances"
+msgstr "Подъезды"
+
+msgid "Dwelling Units"
+msgstr "Жилые помещения"
+
+msgid "Non-Residential Units"
+msgstr "Нежилые помещения"
+
+msgid "Total Area, m²"
+msgstr "Общая площадь, м²"
+
+msgid "Living Area, m²"
+msgstr "Жилая площадь, м²"
+
+msgid "Common Property Area, m²"
+msgstr "Площадь общего имущества, м²"
+
+msgid "Land Plot Area, m²"
+msgstr "Площадь земельного участка, м²"
+
+msgid "Elevators"
+msgstr "Лифты"
+
+msgid "Garbage Chute"
+msgstr "Мусоропровод"
+
+msgid "Heating"
+msgstr "Отопление"
+
+msgid "Hot Water Supply"
+msgstr "Горячее водоснабжение"
+
+msgid "Cold Water Supply"
+msgstr "Холодное водоснабжение"
+
+msgid "Sewage"
+msgstr "Водоотведение"
+
+msgid "Electricity Supply"
+msgstr "Электроснабжение"
+
+msgid "Gas Supply"
+msgstr "Газоснабжение"
+
+msgid "Ventilation"
+msgstr "Вентиляция"
+
+msgid "Management Contract Number"
+msgstr "Номер договора управления"
+
+msgid "Contract Date"
+msgstr "Дата договора"
+
+msgid "Contract Term"
+msgstr "Срок договора"
+
+msgid "Management Method"
+msgstr "Способ управления"
+
+msgid "Management Company"
+msgstr "Управляющая компания"
+
+msgid "Homeowners Association (HOA)"
+msgstr "Товарищество собственников жилья (ТСЖ)"
+
+msgid "Direct Management by Owners"
+msgstr "Непосредственное управление собственниками"
+
+msgid "Building Representative (Contact)"
+msgstr "Представитель дома (контакт)"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "— not specified —"
+msgstr "— не указано —"
+
+msgid "Invalid property."
+msgstr "Некорректный объект."
+
+msgid "No documents found."
+msgstr "Документы не найдены."
+
+msgid "Download"
+msgstr "Скачать"
+
+msgid "Properties"
+msgstr "Объекты"
+
+msgid "All Properties"
+msgstr "Все объекты"
+
+msgid "Add New"
+msgstr "Добавить"
+
+msgid "Add New Property"
+msgstr "Добавить объект"
+
+msgid "Edit Property"
+msgstr "Редактировать объект"
+
+msgid "New Property"
+msgstr "Новый объект"
+
+msgid "View Property"
+msgstr "Просмотреть объект"
+
+msgid "Search Properties"
+msgstr "Поиск объектов"
+
+msgid "No properties found"
+msgstr "Объекты не найдены"
+
+msgid "No properties found in trash"
+msgstr "В корзине объектов не найдено"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Statuses"
+msgstr "Статусы"
+
+msgid "All Statuses"
+msgstr "Все статусы"
+
+msgid "Add New Status"
+msgstr "Добавить статус"
+
+msgid "Edit Status"
+msgstr "Редактировать статус"
+
+msgid "New Status"
+msgstr "Новый статус"
+
+msgid "Search Statuses"
+msgstr "Поиск статусов"
+
+msgid "No statuses found"
+msgstr "Статусы не найдены"
+
+msgid "Documents"
+msgstr "Документы"
+
+msgid "Document"
+msgstr "Документ"
+
+msgid "All Documents"
+msgstr "Все документы"
+
+msgid "Add New Document"
+msgstr "Добавить документ"
+
+msgid "Edit Document"
+msgstr "Редактировать документ"
+
+msgid "New Document"
+msgstr "Новый документ"
+
+msgid "Search Documents"
+msgstr "Поиск документов"
+
+msgid "No documents found in trash"
+msgstr "В корзине документов не найдено"
+
+msgid "Document Type"
+msgstr "Тип документа"
+
+msgid "Document Types"
+msgstr "Типы документов"
+
+msgid "All Types"
+msgstr "Все типы"
+
+msgid "Add New Type"
+msgstr "Добавить тип"
+
+msgid "Edit Type"
+msgstr "Редактировать тип"
+
+msgid "New Type"
+msgstr "Новый тип"
+
+msgid "Search Types"
+msgstr "Поиск типов"
+
+msgid "No types found"
+msgstr "Типы не найдены"
+
+msgid "Work Category"
+msgstr "Категория работ"
+
+msgid "Work Categories"
+msgstr "Категории работ"
+
+msgid "All Categories"
+msgstr "Все категории"
+
+msgid "Add New Category"
+msgstr "Добавить категорию"
+
+msgid "Edit Category"
+msgstr "Редактировать категорию"
+
+msgid "New Category"
+msgstr "Новая категория"
+
+msgid "Search Categories"
+msgstr "Поиск категорий"
+
+msgid "No categories found"
+msgstr "Категории не найдены"
+
+msgid "In Management"
+msgstr "В управлении"
+
+msgid "Emergency"
+msgstr "Аварийный"
+
+msgid "Removed from Management"
+msgstr "Снят с управления"
+
+msgid "Work Act"
+msgstr "Акт выполненных работ"
+
+msgid "Annual Report"
+msgstr "Годовой отчёт"
+
+msgid "Meeting Minutes"
+msgstr "Протокол собрания"
+
+msgid "Common Property Maintenance"
+msgstr "Содержание общего имущества"
+
+msgid "Current Repair"
+msgstr "Текущий ремонт"
+
+msgid "Capital Repair"
+msgstr "Капитальный ремонт"
+
+msgid "Emergency Works"
+msgstr "Аварийные работы"
+
+msgid "No properties found."
+msgstr "Объекты не найдены."
+
+#. translators: %s: year built
+#, php-format
+msgid "Built %s"
+msgstr "Год постройки: %s"
+
+#. translators: %s: number of floors
+#, php-format
+msgid "%s floor"
+msgid_plural "%s floors"
+msgstr[0] "%s этаж"
+msgstr[1] "%s этажа"
+msgstr[2] "%s этажей"
+
+msgid "All types"
+msgstr "Все типы"
+
+msgid "All years"
+msgstr "Все годы"
+
+msgid "Events"
+msgstr "Мероприятия"
+
+msgid "No documents found"
+msgstr "Документы не найдены"
+
+msgid "Location"
+msgstr "Расположение"
+
+msgid "Click on the map to set the property location, or use the search field."
+msgstr "Кликните по карте, чтобы указать местоположение объекта, или используйте поиск."
+
+msgid "Search address..."
+msgstr "Поиск адреса..."
+
+msgid "Yandex API key is not set. Please configure it in Theme Options > API > Yandex API Key."
+msgstr "Ключ API Яндекс.Карт не задан. Настройте его в Theme Options > API > Yandex API Key."
+
+msgid "Latitude"
+msgstr "Широта"
+
+msgid "Longitude"
+msgstr "Долгота"
+
+msgid "Zoom"
+msgstr "Масштаб"
+
+msgid "Address (from map)"
+msgstr "Адрес (по карте)"
+
+msgid "View property"
+msgstr "Смотреть объект"

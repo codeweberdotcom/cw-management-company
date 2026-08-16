@@ -31,4 +31,9 @@ spl_autoload_register( function ( $class ) {
 	}
 } );
 
-// Plugin bootstrap (CPTs, taxonomies, admin) will be wired up in a later step.
+register_activation_hook( CW_MC_FILE, [ \CW\ManagementCompany\Plugin::class, 'activate' ] );
+
+add_action( 'plugins_loaded', function () {
+	load_plugin_textdomain( 'cw-management-company', false, dirname( plugin_basename( CW_MC_FILE ) ) . '/languages' );
+	( new \CW\ManagementCompany\Plugin() )->init();
+} );
