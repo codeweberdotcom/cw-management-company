@@ -3,6 +3,10 @@
  * Single: Property
  * Template provided by cw-management-company plugin.
  * Override by creating single-mkd_object.php in your (child) theme.
+ *
+ * Markup uses theme / Bootstrap 5 classes only — the plugin ships no CSS.
+ * JS hooks are data-attributes and ids, never classes, so styling stays
+ * entirely in the theme's hands.
  */
 
 use CW\ManagementCompany\Documents;
@@ -117,8 +121,8 @@ while ( have_posts() ) :
 
 	$months_order = [ 'январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь' ];
 
-	// Status tone: accent (done), warning (in progress), muted (not started yet).
-	$tone_class = [ 'accent' => 'done', 'warning' => 'plan', 'muted' => 'neutral' ];
+	// Status tone → theme text colour: accent (done), warning (in progress), muted.
+	$tone_class = [ 'accent' => 'text-primary', 'warning' => 'text-warning', 'muted' => 'text-muted' ];
 
 	// ── Emergency card ────────────────────────────────────────────────────────
 	$emergency_phone = get_post_meta( $post_id, '_mkd_emergency_phone', true );
@@ -131,30 +135,41 @@ while ( have_posts() ) :
 	$show_tariff    = (bool) ( $tariff || $tariff_rows_clean );
 	$show_contact   = (bool) ( $phone || $reception_hours || $team_members );
 	$show_emergency = (bool) ( $emergency_phone || $emergency_items );
+
+	// Placeholder tile for a missing photo.
+	$photo_placeholder = static function ( string $label ) {
+		?>
+		<div class="d-flex flex-column align-items-center justify-content-center h-100 w-100 border rounded bg-light text-muted fs-14 fw-bold text-center p-3">
+			<?php echo esc_html( $label ); ?>
+		</div>
+		<?php
+	};
 	?>
 
-<div class="cw-mc-page">
-
 	<?php /* ════════════════════════════════════════ 1. HERO */ ?>
-	<section class="cw-mc-s-hero">
-		<div class="cw-mc-wrap">
+	<section class="wrapper">
+		<div class="container pt-8 pb-10 pt-md-10 pb-md-12">
 
-			<nav class="cw-mc-breadcrumb" aria-label="breadcrumb">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'cw-management-company' ); ?></a>
-				<span class="cw-mc-breadcrumb__sep" aria-hidden="true">·</span>
-				<a href="<?php echo esc_url( get_post_type_archive_link( 'mkd_object' ) ?: home_url( '/' ) ); ?>"><?php esc_html_e( 'Properties', 'cw-management-company' ); ?></a>
-				<span class="cw-mc-breadcrumb__sep" aria-hidden="true">·</span>
-				<?php echo esc_html( get_the_title() ); ?>
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb fs-14">
+					<li class="breadcrumb-item">
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'cw-management-company' ); ?></a>
+					</li>
+					<li class="breadcrumb-item">
+						<a href="<?php echo esc_url( get_post_type_archive_link( 'mkd_object' ) ?: home_url( '/' ) ); ?>"><?php esc_html_e( 'Properties', 'cw-management-company' ); ?></a>
+					</li>
+					<li class="breadcrumb-item active" aria-current="page"><?php echo esc_html( get_the_title() ); ?></li>
+				</ol>
 			</nav>
 
-			<div class="cw-mc-hero-grid">
+			<div class="row gx-lg-8 gy-6 align-items-start">
 
-				<div>
+				<div class="col-lg-7">
 					<?php
 					$badges = [];
-					if ( $city ) $badges[] = [ 'text' => $city, 'mod' => 'primary' ];
+					if ( $city ) $badges[] = [ 'text' => $city, 'class' => 'bg-pale-primary text-primary' ];
 					$ws = implode( ', ', array_filter( [ $wall_label, $series ] ) );
-					if ( $ws ) $badges[] = [ 'text' => $ws, 'mod' => 'muted' ];
+					if ( $ws ) $badges[] = [ 'text' => $ws, 'class' => 'bg-pale-ash text-muted' ];
 					if ( $contract_date ) {
 						$badges[] = [
 							'text' => sprintf(
@@ -162,73 +177,72 @@ while ( have_posts() ) :
 								__( 'In management since %s', 'cw-management-company' ),
 								mysql2date( 'F Y', $contract_date )
 							),
-							'mod' => 'muted',
+							'class' => 'bg-pale-ash text-muted',
 						];
 					}
-					if ( $status_term ) $badges[] = [ 'text' => $status_term->name, 'mod' => 'muted' ];
+					if ( $status_term ) $badges[] = [ 'text' => $status_term->name, 'class' => 'bg-pale-ash text-muted' ];
 					?>
 					<?php if ( $badges ) : ?>
-					<div class="cw-mc-badges">
+					<div class="d-flex flex-wrap gap-2 mb-3">
 						<?php foreach ( $badges as $b ) : ?>
-						<span class="cw-mc-badge cw-mc-badge--<?php echo esc_attr( $b['mod'] ); ?>">
+						<span class="badge rounded-pill <?php echo esc_attr( $b['class'] ); ?>">
 							<?php echo esc_html( $b['text'] ); ?>
 						</span>
 						<?php endforeach; ?>
 					</div>
 					<?php endif; ?>
 
-					<h1 class="cw-mc-h1"><?php echo wp_kses_post( get_the_title() ); ?></h1>
+					<h1 class="display-4 mb-3"><?php echo wp_kses_post( get_the_title() ); ?></h1>
 
 					<?php if ( $address && get_the_title() !== $address ) : ?>
-					<p class="text-muted small mb-3"><?php echo esc_html( $address ); ?></p>
+					<p class="text-muted fs-15 mb-4"><?php echo esc_html( $address ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( get_the_content() ) : ?>
-					<div class="cw-mc-desc"><?php the_content(); ?></div>
+					<div class="lead fs-lg"><?php the_content(); ?></div>
 					<?php endif; ?>
 
 					<?php if ( $spec_items ) : ?>
-					<div class="cw-mc-specs">
+					<div class="row g-4 border-top pt-6 mt-6">
 						<?php foreach ( $spec_items as $s ) : ?>
-						<div>
-							<div class="cw-mc-spec__label"><?php echo esc_html( $s['k'] ); ?></div>
-							<div class="cw-mc-spec__value"><?php echo esc_html( $s['v'] ); ?></div>
+						<div class="col-6 col-md-3">
+							<div class="fs-14 text-muted"><?php echo esc_html( $s['k'] ); ?></div>
+							<div class="h5 mb-0 mt-1"><?php echo esc_html( $s['v'] ); ?></div>
 						</div>
 						<?php endforeach; ?>
 					</div>
 					<?php endif; ?>
 				</div>
 
-				<div class="cw-mc-photo-grid">
-					<div class="cw-mc-photo-grid__facade">
-						<?php if ( has_post_thumbnail() ) : ?>
-						<?php the_post_thumbnail( 'large', [ 'alt' => '' ] ); ?>
-						<?php else : ?>
-						<div class="cw-mc-photo-grid__placeholder">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="m3 16 5-5 4 4 3-2 6 7"/><circle cx="8" cy="8" r="1.5"/></svg>
-							<?php esc_html_e( 'Building Facade', 'cw-management-company' ); ?>
+				<div class="col-lg-5">
+					<div class="row g-3">
+						<div class="col-12">
+							<div class="ratio ratio-16x9 rounded overflow-hidden bg-light">
+								<?php if ( has_post_thumbnail() ) : ?>
+								<?php the_post_thumbnail( 'large', [ 'alt' => '', 'class' => 'object-fit-cover' ] ); ?>
+								<?php else : ?>
+								<?php $photo_placeholder( __( 'Building Facade', 'cw-management-company' ) ); ?>
+								<?php endif; ?>
+							</div>
 						</div>
-						<?php endif; ?>
-					</div>
-					<div class="cw-mc-photo-grid__secondary">
-						<?php if ( $photo_yard_id > 0 ) : ?>
-						<?php echo wp_get_attachment_image( $photo_yard_id, 'medium', false, [ 'alt' => esc_attr__( 'Yard', 'cw-management-company' ) ] ); ?>
-						<?php else : ?>
-						<div class="cw-mc-photo-grid__placeholder">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="m3 16 5-5 4 4 3-2 6 7"/><circle cx="8" cy="8" r="1.5"/></svg>
-							<?php esc_html_e( 'Yard', 'cw-management-company' ); ?>
+						<div class="col-6">
+							<div class="ratio ratio-4x3 rounded overflow-hidden bg-light">
+								<?php if ( $photo_yard_id > 0 ) : ?>
+								<?php echo wp_get_attachment_image( $photo_yard_id, 'medium', false, [ 'alt' => esc_attr__( 'Yard', 'cw-management-company' ), 'class' => 'object-fit-cover' ] ); ?>
+								<?php else : ?>
+								<?php $photo_placeholder( __( 'Yard', 'cw-management-company' ) ); ?>
+								<?php endif; ?>
+							</div>
 						</div>
-						<?php endif; ?>
-					</div>
-					<div class="cw-mc-photo-grid__secondary">
-						<?php if ( $photo_entrance_id > 0 ) : ?>
-						<?php echo wp_get_attachment_image( $photo_entrance_id, 'medium', false, [ 'alt' => esc_attr__( 'Entrance', 'cw-management-company' ) ] ); ?>
-						<?php else : ?>
-						<div class="cw-mc-photo-grid__placeholder">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2.5"/><path d="m3 16 5-5 4 4 3-2 6 7"/><circle cx="8" cy="8" r="1.5"/></svg>
-							<?php esc_html_e( 'Entrance', 'cw-management-company' ); ?>
+						<div class="col-6">
+							<div class="ratio ratio-4x3 rounded overflow-hidden bg-light">
+								<?php if ( $photo_entrance_id > 0 ) : ?>
+								<?php echo wp_get_attachment_image( $photo_entrance_id, 'medium', false, [ 'alt' => esc_attr__( 'Entrance', 'cw-management-company' ), 'class' => 'object-fit-cover' ] ); ?>
+								<?php else : ?>
+								<?php $photo_placeholder( __( 'Entrance', 'cw-management-company' ) ); ?>
+								<?php endif; ?>
+							</div>
 						</div>
-						<?php endif; ?>
 					</div>
 				</div>
 
@@ -238,13 +252,13 @@ while ( have_posts() ) :
 
 	<?php /* ════════════════════════════════════════ 2. TARIFF + CONTACT */ ?>
 	<?php if ( $show_tariff || $show_contact ) : ?>
-	<section class="cw-mc-s" id="tariff">
-		<div class="cw-mc-wrap">
-			<div class="cw-mc-2col">
+	<section class="wrapper" id="tariff">
+		<div class="container pb-10 pb-md-12">
+			<div class="row gx-lg-8 gy-6 align-items-start">
 
 				<?php if ( $show_tariff ) : ?>
-				<div>
-					<h2 class="cw-mc-h2">
+				<div class="col-lg-7">
+					<h2 class="mb-2">
 						<?php if ( $tariff_display ) :
 							printf(
 								/* translators: %s: tariff amount with unit */
@@ -261,7 +275,7 @@ while ( have_posts() ) :
 					$meeting_number = $protocol_date ? $protocol_number : $contract_number;
 					?>
 					<?php if ( $meeting_date ) : ?>
-					<p class="cw-mc-tariff-meta">
+					<p class="text-muted fs-15">
 						<?php
 						$meta_str = sprintf(
 							/* translators: %s: meeting date */
@@ -280,20 +294,27 @@ while ( have_posts() ) :
 					</p>
 					<?php endif; ?>
 					<?php if ( $tariff_rows_clean ) : ?>
-					<div class="cw-mc-tariff-card">
-						<?php foreach ( $tariff_rows_clean as $trow ) :
-							$pct = min( 100, max( 0, (float) str_replace( [ '%', ',' ], [ '', '.' ], (string) ( $trow['pct'] ?? 0 ) ) ) );
-						?>
-						<div class="cw-mc-tariff-row">
-							<div class="cw-mc-tariff-row__name"><?php echo esc_html( $trow['name'] ); ?></div>
-							<div class="cw-mc-tariff-row__val"><?php echo esc_html( $trow['val'] ?? '' ); ?></div>
-							<div class="cw-mc-tariff-row__track">
-								<div class="cw-mc-tariff-row__fill" style="--w:<?php echo esc_attr( $pct ); ?>%"></div>
+					<div class="card mt-5">
+						<div class="card-body p-0">
+							<?php foreach ( $tariff_rows_clean as $i => $trow ) :
+								$pct = min( 100, max( 0, (float) str_replace( [ '%', ',' ], [ '', '.' ], (string) ( $trow['pct'] ?? 0 ) ) ) );
+							?>
+							<div class="row g-3 align-items-center px-4 py-3<?php echo $i ? ' border-top' : ''; ?>">
+								<div class="col-6 col-md-5 fw-bold"><?php echo esc_html( $trow['name'] ); ?></div>
+								<div class="col-6 col-md-2 fw-bold text-md-end"><?php echo esc_html( $trow['val'] ?? '' ); ?></div>
+								<div class="col-12 col-md-5">
+									<div class="progress" style="height: 8px;">
+										<div class="progress-bar bg-primary" role="progressbar"
+											style="width: <?php echo esc_attr( $pct ); ?>%"
+											aria-valuenow="<?php echo esc_attr( $pct ); ?>"
+											aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
 							</div>
+							<?php endforeach; ?>
 						</div>
-						<?php endforeach; ?>
 						<?php if ( $tariff_display ) : ?>
-						<div class="cw-mc-tariff-total">
+						<div class="card-footer bg-pale-ash d-flex justify-content-between fw-bold">
 							<span><?php esc_html_e( 'Total', 'cw-management-company' ); ?></span>
 							<span><?php echo esc_html( $tariff_display . ' ' . __( 'per month', 'cw-management-company' ) ); ?></span>
 						</div>
@@ -301,42 +322,46 @@ while ( have_posts() ) :
 					</div>
 					<?php endif; ?>
 				</div>
-				<?php else : ?>
-				<div></div>
 				<?php endif; ?>
 
 				<?php if ( $show_contact ) : ?>
-				<div class="cw-mc-contact-card">
-					<?php if ( $team_members ) : ?>
-					<div class="cw-mc-contact-card__eyebrow"><?php esc_html_e( 'ASSIGNED TEAM', 'cw-management-company' ); ?></div>
-					<div class="cw-mc-team-list">
-						<?php foreach ( $team_members as $member ) : ?>
-						<div class="cw-mc-team-member">
-							<div class="cw-mc-avatar"><?php echo esc_html( $member['initials'] ?? '?' ); ?></div>
-							<div>
-								<div class="cw-mc-team-member__name"><?php echo esc_html( $member['name'] ?? '' ); ?></div>
-								<?php if ( ! empty( $member['role'] ) ) : ?>
-								<div class="cw-mc-team-member__role"><?php echo esc_html( $member['role'] ); ?></div>
+				<div class="col-lg-5">
+					<div class="card bg-navy text-inverse">
+						<div class="card-body p-6">
+							<?php if ( $team_members ) : ?>
+							<div class="fs-13 fw-bold text-uppercase text-primary mb-4"><?php esc_html_e( 'ASSIGNED TEAM', 'cw-management-company' ); ?></div>
+							<div class="d-flex flex-column gap-4">
+								<?php foreach ( $team_members as $member ) : ?>
+								<div class="d-flex align-items-center gap-3">
+									<div class="avatar bg-pale-primary text-primary w-11 h-11 fs-15">
+										<?php echo esc_html( $member['initials'] ?? '?' ); ?>
+									</div>
+									<div>
+										<div class="fw-bold"><?php echo esc_html( $member['name'] ?? '' ); ?></div>
+										<?php if ( ! empty( $member['role'] ) ) : ?>
+										<div class="fs-13 opacity-75"><?php echo esc_html( $member['role'] ); ?></div>
+										<?php endif; ?>
+									</div>
+								</div>
+								<?php endforeach; ?>
+							</div>
+							<?php endif; ?>
+
+							<?php if ( $phone || $reception_hours ) : ?>
+							<div class="<?php echo $team_members ? 'border-top mt-6 pt-5' : ''; ?>">
+								<?php if ( $phone ) : ?>
+								<div class="fs-14 opacity-75"><?php esc_html_e( 'Building Dispatcher', 'cw-management-company' ); ?></div>
+								<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $phone ) ); ?>" class="h4 mb-0 d-block text-inverse text-decoration-none">
+									<?php echo esc_html( $phone ); ?>
+								</a>
+								<?php endif; ?>
+								<?php if ( $reception_hours ) : ?>
+								<div class="fs-14 opacity-75 mt-2"><?php echo esc_html( $reception_hours ); ?></div>
 								<?php endif; ?>
 							</div>
+							<?php endif; ?>
 						</div>
-						<?php endforeach; ?>
 					</div>
-					<?php endif; ?>
-
-					<?php if ( $phone || $reception_hours ) : ?>
-					<div class="cw-mc-contact-card__footer">
-						<?php if ( $phone ) : ?>
-						<div class="cw-mc-contact-card__sub"><?php esc_html_e( 'Building Dispatcher', 'cw-management-company' ); ?></div>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $phone ) ); ?>" class="cw-mc-contact-card__phone">
-							<?php echo esc_html( $phone ); ?>
-						</a>
-						<?php endif; ?>
-						<?php if ( $reception_hours ) : ?>
-						<div class="cw-mc-contact-card__hours"><?php echo esc_html( $reception_hours ); ?></div>
-						<?php endif; ?>
-					</div>
-					<?php endif; ?>
 				</div>
 				<?php endif; ?>
 
@@ -347,35 +372,39 @@ while ( have_posts() ) :
 
 	<?php /* ════════════════════════════════════════ 3. WORKS */ ?>
 	<?php if ( $works_done || $works_plan ) : ?>
-	<section class="cw-mc-s" id="works">
-		<div class="cw-mc-wrap">
+	<section class="wrapper" id="works">
+		<div class="container pb-10 pb-md-12">
 
-			<div class="cw-mc-works-header">
-				<h2 class="cw-mc-h2"><?php esc_html_e( 'Completed Works & Plans', 'cw-management-company' ); ?></h2>
+			<div class="d-flex flex-wrap align-items-end justify-content-between gap-4">
+				<h2 class="mb-0"><?php esc_html_e( 'Completed Works & Plans', 'cw-management-company' ); ?></h2>
 				<?php if ( $works_done && $works_plan ) : ?>
-				<div class="cw-mc-tabs" id="cw-mc-works-tabs">
-					<button type="button" class="cw-mc-tab-btn is-active" data-tab="done">
-						<?php esc_html_e( 'Completed', 'cw-management-company' ); ?>
-					</button>
-					<button type="button" class="cw-mc-tab-btn" data-tab="plan">
-						<?php esc_html_e( 'Planned', 'cw-management-company' ); ?>
-					</button>
-				</div>
+				<ul class="nav nav-pills" id="cw-mc-works-tabs">
+					<li class="nav-item">
+						<button type="button" class="nav-link active" data-cw-tab="done">
+							<?php esc_html_e( 'Completed', 'cw-management-company' ); ?>
+						</button>
+					</li>
+					<li class="nav-item">
+						<button type="button" class="nav-link" data-cw-tab="plan">
+							<?php esc_html_e( 'Planned', 'cw-management-company' ); ?>
+						</button>
+					</li>
+				</ul>
 				<?php endif; ?>
 			</div>
 
-			<div class="cw-mc-works-meta">
-				<select class="cw-mc-select" id="cw-mc-filter-year" aria-label="<?php esc_attr_e( 'Filter by year', 'cw-management-company' ); ?>" hidden></select>
-				<select class="cw-mc-select" id="cw-mc-filter-month" aria-label="<?php esc_attr_e( 'Filter by month', 'cw-management-company' ); ?>" hidden></select>
-				<span class="cw-mc-works-count" id="cw-mc-works-count" aria-live="polite"></span>
+			<div class="d-flex flex-wrap align-items-center gap-3 mt-5">
+				<select class="form-select form-select-sm w-auto" id="cw-mc-filter-year" aria-label="<?php esc_attr_e( 'Filter by year', 'cw-management-company' ); ?>" hidden></select>
+				<select class="form-select form-select-sm w-auto" id="cw-mc-filter-month" aria-label="<?php esc_attr_e( 'Filter by month', 'cw-management-company' ); ?>" hidden></select>
+				<span class="ms-auto fs-14 fw-bold text-muted text-nowrap" id="cw-mc-works-count" aria-live="polite"></span>
 			</div>
 
 			<?php
 			$render_pane = static function ( array $list, string $id, bool $active ) use ( $parse_year, $parse_month, $tone_class ) {
 				if ( ! $list ) return;
 				?>
-				<div id="<?php echo esc_attr( $id ); ?>" class="cw-mc-works-pane<?php echo $active ? '' : ' d-none'; ?>">
-					<div class="cw-mc-works-list">
+				<div id="<?php echo esc_attr( $id ); ?>" data-cw-pane class="mt-4<?php echo $active ? '' : ' d-none'; ?>">
+					<div class="d-flex flex-column gap-3">
 						<?php foreach ( $list as $w ) :
 							if ( '' === trim( $w['title'] ?? '' ) ) continue;
 							$is_done = 'done' === ( $w['type'] ?? '' );
@@ -383,24 +412,28 @@ while ( have_posts() ) :
 								? $w['status']
 								: ( $is_done ? __( 'Completed', 'cw-management-company' ) : __( 'Planned', 'cw-management-company' ) );
 							$tone    = $w['tone'] ?? ( $is_done ? 'accent' : 'warning' );
-							$s_mod   = $tone_class[ $tone ] ?? 'plan';
+							$s_class = $tone_class[ $tone ] ?? 'text-warning';
 							$wy      = $parse_year( $w['date'] ?? '' );
 							$wm      = $parse_month( $w['date'] ?? '' );
 						?>
-						<div class="cw-mc-work-row"
+						<div class="card" data-cw-work
 							data-year="<?php echo esc_attr( $wy ); ?>"
 							data-month="<?php echo esc_attr( $wm ); ?>"
 							data-cost="<?php echo esc_attr( $w['cost'] ?? '' ); ?>">
-							<div class="cw-mc-work-row__date"><?php echo esc_html( $w['date'] ?? '' ); ?></div>
-							<div>
-								<div class="cw-mc-work-row__title"><?php echo esc_html( $w['title'] ); ?></div>
-								<?php if ( ! empty( $w['detail'] ) ) : ?>
-								<div class="cw-mc-work-row__detail"><?php echo esc_html( $w['detail'] ); ?></div>
-								<?php endif; ?>
-							</div>
-							<div class="cw-mc-work-row__cost"><?php echo esc_html( $w['cost'] ?? '' ); ?></div>
-							<div class="cw-mc-work-row__status cw-mc-work-row__status--<?php echo esc_attr( $s_mod ); ?>">
-								<?php echo esc_html( $s_text ); ?>
+							<div class="card-body p-4">
+								<div class="row g-3 align-items-center">
+									<div class="col-md-2 fs-14 fw-bold text-muted"><?php echo esc_html( $w['date'] ?? '' ); ?></div>
+									<div class="col-md-5">
+										<div class="h6 mb-0"><?php echo esc_html( $w['title'] ); ?></div>
+										<?php if ( ! empty( $w['detail'] ) ) : ?>
+										<div class="fs-14 text-muted mt-1"><?php echo esc_html( $w['detail'] ); ?></div>
+										<?php endif; ?>
+									</div>
+									<div class="col-6 col-md-2 fs-15 text-muted text-nowrap"><?php echo esc_html( $w['cost'] ?? '' ); ?></div>
+									<div class="col-6 col-md-3 fs-14 fw-bold <?php echo esc_attr( $s_class ); ?>">
+										<?php echo esc_html( $s_text ); ?>
+									</div>
+								</div>
 							</div>
 						</div>
 						<?php endforeach; ?>
@@ -416,9 +449,9 @@ while ( have_posts() ) :
 			}
 			?>
 
-			<button type="button" class="cw-mc-works-more" id="cw-mc-works-more" hidden></button>
+			<button type="button" class="btn btn-soft-primary w-100 mt-3" id="cw-mc-works-more" hidden></button>
 
-			<p class="cw-mc-works-note">
+			<p class="fs-14 text-muted mt-4 mb-0">
 				<?php esc_html_e( 'Full list of works for all management years — in annual reports in the', 'cw-management-company' ); ?>
 				<?php if ( $documents ) : ?>
 				<a href="#docs"><?php esc_html_e( 'documents section', 'cw-management-company' ); ?></a>
@@ -433,8 +466,8 @@ while ( have_posts() ) :
 
 	<?php /* ════════════════════════════════════════ 4. DOCUMENTS + EMERGENCY */ ?>
 	<?php if ( $documents || $document_years || $show_emergency ) : ?>
-	<section class="cw-mc-s" id="docs">
-		<div class="cw-mc-wrap">
+	<section class="wrapper" id="docs">
+		<div class="container pb-12 pb-md-16">
 			<?php
 			$has_docs = (bool) ( $documents || $document_years );
 			$use_2col = $has_docs && $show_emergency;
@@ -442,9 +475,9 @@ while ( have_posts() ) :
 			$render_doc_filter = static function () use ( $document_type_terms, $document_years ) {
 				if ( ( $document_type_terms && ! is_wp_error( $document_type_terms ) && count( $document_type_terms ) > 1 ) || count( $document_years ) > 1 ) {
 					?>
-					<form id="cw-mc-document-filter" class="cw-mc-doc-filter">
+					<form id="cw-mc-document-filter" class="d-flex flex-wrap gap-3 my-5">
 						<?php if ( $document_type_terms && ! is_wp_error( $document_type_terms ) ) : ?>
-						<select name="type" class="cw-mc-select">
+						<select name="type" class="form-select form-select-sm w-auto">
 							<option value=""><?php esc_html_e( 'All types', 'cw-management-company' ); ?></option>
 							<?php foreach ( $document_type_terms as $type_term ) : ?>
 							<option value="<?php echo esc_attr( $type_term->slug ); ?>"><?php echo esc_html( $type_term->name ); ?></option>
@@ -452,7 +485,7 @@ while ( have_posts() ) :
 						</select>
 						<?php endif; ?>
 						<?php if ( $document_years ) : ?>
-						<select name="year" class="cw-mc-select">
+						<select name="year" class="form-select form-select-sm w-auto">
 							<option value=""><?php esc_html_e( 'All years', 'cw-management-company' ); ?></option>
 							<?php foreach ( $document_years as $year ) : ?>
 							<option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
@@ -466,51 +499,53 @@ while ( have_posts() ) :
 
 			$render_emergency_card = static function () use ( $emergency_phone, $emergency_items, $emergency_note ) {
 				?>
-				<div class="cw-mc-emergency-card">
-					<div class="cw-mc-emergency-card__header">
-						<h2 class="cw-mc-emergency-card__title"><?php esc_html_e( 'What to Do in an Emergency', 'cw-management-company' ); ?></h2>
-						<?php if ( $emergency_phone ) : ?>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $emergency_phone ) ); ?>" class="cw-mc-emergency-card__phone">
-							<?php echo esc_html( $emergency_phone ); ?>
-						</a>
-						<?php endif; ?>
-					</div>
-					<?php if ( $emergency_items ) : ?>
-					<div class="cw-mc-emergency-list">
-						<?php foreach ( $emergency_items as $item ) : ?>
-						<div class="cw-mc-emergency-item">
-							<div class="cw-mc-emergency-item__title"><?php echo esc_html( $item['title'] ?? '' ); ?></div>
-							<?php if ( ! empty( $item['desc'] ) ) : ?>
-							<div class="cw-mc-emergency-item__desc"><?php echo nl2br( esc_html( $item['desc'] ) ); ?></div>
+				<div class="card bg-navy text-inverse">
+					<div class="card-body p-6">
+						<div class="d-flex flex-wrap align-items-baseline justify-content-between gap-3">
+							<h2 class="mb-0 text-inverse"><?php esc_html_e( 'What to Do in an Emergency', 'cw-management-company' ); ?></h2>
+							<?php if ( $emergency_phone ) : ?>
+							<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $emergency_phone ) ); ?>" class="h5 mb-0 text-nowrap text-decoration-none">
+								<?php echo esc_html( $emergency_phone ); ?>
+							</a>
 							<?php endif; ?>
 						</div>
-						<?php endforeach; ?>
+						<?php if ( $emergency_items ) : ?>
+						<div class="d-flex flex-column gap-3 mt-5">
+							<?php foreach ( $emergency_items as $i => $item ) : ?>
+							<div class="<?php echo $i ? 'border-top pt-3' : ''; ?>">
+								<div class="fw-bold"><?php echo esc_html( $item['title'] ?? '' ); ?></div>
+								<?php if ( ! empty( $item['desc'] ) ) : ?>
+								<div class="fs-14 opacity-75 mt-1"><?php echo nl2br( esc_html( $item['desc'] ) ); ?></div>
+								<?php endif; ?>
+							</div>
+							<?php endforeach; ?>
+						</div>
+						<?php endif; ?>
+						<?php if ( $emergency_note ) : ?>
+						<div class="fs-13 text-primary mt-5"><?php echo esc_html( $emergency_note ); ?></div>
+						<?php endif; ?>
 					</div>
-					<?php endif; ?>
-					<?php if ( $emergency_note ) : ?>
-					<div class="cw-mc-emergency-card__note"><?php echo esc_html( $emergency_note ); ?></div>
-					<?php endif; ?>
 				</div>
 				<?php
 			};
 			?>
 
 			<?php if ( $use_2col ) : ?>
-			<div class="cw-mc-docs-grid">
-				<div>
-					<h2 class="cw-mc-h2"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
+			<div class="row gx-lg-8 gy-6 align-items-start">
+				<div class="col-lg-6">
+					<h2 class="mb-0"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
 					<?php $render_doc_filter(); ?>
-					<div id="cw-mc-documents-list">
+					<div id="cw-mc-documents-list" class="mt-5">
 						<?php echo Documents::render_list( $documents ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</div>
 				</div>
-				<div><?php $render_emergency_card(); ?></div>
+				<div class="col-lg-6"><?php $render_emergency_card(); ?></div>
 			</div>
 
 			<?php elseif ( $has_docs ) : ?>
-			<h2 class="cw-mc-h2"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
+			<h2 class="mb-0"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
 			<?php $render_doc_filter(); ?>
-			<div id="cw-mc-documents-list">
+			<div id="cw-mc-documents-list" class="mt-5">
 				<?php echo Documents::render_list( $documents ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
 
@@ -521,8 +556,6 @@ while ( have_posts() ) :
 		</div>
 	</section>
 	<?php endif; ?>
-
-</div><?php /* .cw-mc-page */ ?>
 
 <?php if ( $works_done || $works_plan ) : ?>
 <script>
@@ -556,21 +589,21 @@ while ( have_posts() ) :
 	var monthSel = document.getElementById('cw-mc-filter-month');
 	var counter  = document.getElementById('cw-mc-works-count');
 	var moreBtn  = document.getElementById('cw-mc-works-more');
-	var tabBtns  = document.querySelectorAll('#cw-mc-works-tabs .cw-mc-tab-btn');
+	var tabBtns  = document.querySelectorAll('#cw-mc-works-tabs [data-cw-tab]');
 
 	// null = not chosen yet (falls back to "all"), '' = explicitly "all".
 	var state = { year: null, month: null, limit: CFG.page };
 
-	function activePane() { return document.querySelector('.cw-mc-works-pane:not(.d-none)'); }
+	function activePane() { return document.querySelector('[data-cw-pane]:not(.d-none)'); }
 
 	function isPlanTab() {
-		var active = document.querySelector('#cw-mc-works-tabs .cw-mc-tab-btn.is-active');
-		return !!active && 'plan' === active.dataset.tab;
+		var active = document.querySelector('#cw-mc-works-tabs [data-cw-tab].active');
+		return !!active && 'plan' === active.dataset.cwTab;
 	}
 
 	function paneRows() {
 		var pane = activePane();
-		return pane ? Array.prototype.slice.call(pane.querySelectorAll('.cw-mc-work-row')) : [];
+		return pane ? Array.prototype.slice.call(pane.querySelectorAll('[data-cw-work]')) : [];
 	}
 
 	function uniq(list) {
@@ -660,15 +693,15 @@ while ( have_posts() ) :
 			var ok = (!state.year || row.dataset.year === state.year) &&
 			         (!state.month || row.dataset.month === state.month);
 			if (ok) matched.push(row);
-			row.classList.toggle('cw-mc-hidden', !ok);
+			row.classList.toggle('d-none', !ok);
 		});
 		matched.forEach(function (row, i) {
-			if (i >= state.limit) row.classList.add('cw-mc-hidden');
+			if (i >= state.limit) row.classList.add('d-none');
 		});
 
 		// Rows in the inactive pane must never leak into the layout.
-		document.querySelectorAll('.cw-mc-works-pane.d-none .cw-mc-work-row').forEach(function (row) {
-			row.classList.add('cw-mc-hidden');
+		document.querySelectorAll('[data-cw-pane].d-none [data-cw-work]').forEach(function (row) {
+			row.classList.add('d-none');
 		});
 
 		// ── Counter ──────────────────────────────────────────────────────────
@@ -693,10 +726,10 @@ while ( have_posts() ) :
 
 	tabBtns.forEach(function (btn) {
 		btn.addEventListener('click', function () {
-			tabBtns.forEach(function (b) { b.classList.remove('is-active'); });
-			btn.classList.add('is-active');
-			document.querySelectorAll('.cw-mc-works-pane').forEach(function (p) { p.classList.add('d-none'); });
-			var pane = document.getElementById('cw-mc-pane-' + btn.dataset.tab);
+			tabBtns.forEach(function (b) { b.classList.remove('active'); });
+			btn.classList.add('active');
+			document.querySelectorAll('[data-cw-pane]').forEach(function (p) { p.classList.add('d-none'); });
+			var pane = document.getElementById('cw-mc-pane-' + btn.dataset.cwTab);
 			if (pane) pane.classList.remove('d-none');
 			state.year = null;
 			state.month = null;

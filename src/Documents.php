@@ -73,11 +73,11 @@ class Documents {
 		ob_start();
 
 		if ( ! $docs ) {
-			echo '<p class="cw-mc-docs-empty">' . esc_html__( 'No documents found.', 'cw-management-company' ) . '</p>';
+			echo '<p class="text-muted mb-0">' . esc_html__( 'No documents found.', 'cw-management-company' ) . '</p>';
 			return ob_get_clean();
 		}
 		?>
-		<div class="cw-mc-docs-list">
+		<div class="d-flex flex-column gap-2">
 			<?php foreach ( $docs as $doc ) :
 				$file_id  = (int) get_post_meta( $doc->ID, '_mkd_document_file', true );
 				$file_url = $file_id ? wp_get_attachment_url( $file_id ) : '';
@@ -85,18 +85,20 @@ class Documents {
 				$date     = get_post_meta( $doc->ID, '_mkd_document_date', true );
 				$tag      = $file_url ? 'a' : 'div';
 				?>
-				<<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput ?> class="cw-mc-doc-row"<?php
+				<<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput ?> class="card text-body text-decoration-none"<?php
 					if ( $file_url ) {
 						printf( ' href="%s" download', esc_url( $file_url ) );
 					}
 				?>>
-					<?php if ( $ext ) : ?>
-					<span class="cw-mc-doc-row__ext"><?php echo esc_html( $ext ); ?></span>
-					<?php endif; ?>
-					<span class="cw-mc-doc-row__name"><?php echo esc_html( get_the_title( $doc ) ); ?></span>
-					<?php if ( $date ) : ?>
-					<span class="cw-mc-doc-row__meta"><?php echo esc_html( mysql2date( 'd.m.Y', $date ) ); ?></span>
-					<?php endif; ?>
+					<div class="card-body py-3 px-4 d-flex align-items-center gap-3">
+						<?php if ( $ext ) : ?>
+						<span class="badge bg-pale-primary text-primary"><?php echo esc_html( $ext ); ?></span>
+						<?php endif; ?>
+						<span class="flex-fill fw-bold"><?php echo esc_html( get_the_title( $doc ) ); ?></span>
+						<?php if ( $date ) : ?>
+						<span class="fs-14 text-muted text-nowrap"><?php echo esc_html( mysql2date( 'd.m.Y', $date ) ); ?></span>
+						<?php endif; ?>
+					</div>
 				</<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 			<?php endforeach; ?>
 		</div>

@@ -55,13 +55,8 @@ class Plugin {
 			return;
 		}
 
-		wp_enqueue_style(
-			'cw-mc-single',
-			CW_MC_URL . 'assets/css/single.css',
-			[],
-			CW_MC_VERSION
-		);
-
+		// No plugin stylesheet: the single template is built from theme /
+		// Bootstrap classes only, so all styling comes from the active theme.
 		wp_enqueue_script(
 			'cw-mc-document-filter',
 			CW_MC_URL . 'assets/js/document-filter.js',
