@@ -103,6 +103,51 @@
 		tbody.addEventListener('change', serializeWorks);
 	}
 
+	// ── Team members table ───────────────────────────────────────────────────────
+
+	function serializeTeam() {
+		var rows = [];
+		document.querySelectorAll('#cw-mc-team-rows .cw-mc-team-row').forEach(function (tr) {
+			rows.push({
+				initials: tr.querySelector('.tm-ini').value,
+				name:     tr.querySelector('.tm-name').value,
+				role:     tr.querySelector('.tm-role').value,
+			});
+		});
+		document.getElementById('cw-mc-team-json').value = JSON.stringify(rows);
+	}
+
+	function initTeam() {
+		var tbody  = document.getElementById('cw-mc-team-rows');
+		var addBtn = document.getElementById('cw-mc-team-add');
+		if (!tbody || !addBtn) return;
+
+		function newTeamRow() {
+			var tr = document.createElement('tr');
+			tr.className = 'cw-mc-team-row';
+			tr.innerHTML =
+				'<td><input type="text" class="widefat tm-ini" maxlength="3"></td>' +
+				'<td><input type="text" class="widefat tm-name"></td>' +
+				'<td><input type="text" class="widefat tm-role"></td>' +
+				'<td><button type="button" class="button cw-mc-row-remove" title="Remove">&#x2715;</button></td>';
+			tbody.appendChild(tr);
+		}
+
+		addBtn.addEventListener('click', function () {
+			newTeamRow();
+		});
+
+		tbody.addEventListener('click', function (e) {
+			if (e.target.classList.contains('cw-mc-row-remove')) {
+				e.target.closest('tr').remove();
+				serializeTeam();
+			}
+		});
+
+		tbody.addEventListener('input',  serializeTeam);
+		tbody.addEventListener('change', serializeTeam);
+	}
+
 	// ── Gallery media picker ─────────────────────────────────────────────────────
 
 	function initGallery() {
@@ -161,6 +206,7 @@
 		form.addEventListener('submit', function () {
 			serializeTariff();
 			serializeWorks();
+			serializeTeam();
 		});
 	}
 
@@ -169,6 +215,7 @@
 	document.addEventListener('DOMContentLoaded', function () {
 		initTariff();
 		initWorks();
+		initTeam();
 		initGallery();
 	});
 })();

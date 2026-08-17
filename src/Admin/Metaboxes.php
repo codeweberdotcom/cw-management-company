@@ -69,6 +69,14 @@ class Metaboxes {
 			'normal',
 			'default'
 		);
+		add_meta_box(
+			'cw_mc_team',
+			esc_html__( 'Assigned Team', 'cw-management-company' ),
+			[ $this, 'render_team' ],
+			'mkd_object',
+			'normal',
+			'default'
+		);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────
@@ -549,6 +557,43 @@ class Metaboxes {
 		<?php
 	}
 
+	public function render_team( \WP_Post $post ): void {
+		$raw     = get_post_meta( $post->ID, '_mkd_team_members', true );
+		$members = $raw ? json_decode( $raw, true ) : [];
+		if ( ! is_array( $members ) ) {
+			$members = [];
+		}
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Team members displayed in the contact card. Initials: up to 3 characters (e.g. "АГ", "№2").', 'cw-management-company' ); ?>
+		</p>
+		<table class="cw-mc-repeater widefat" style="margin-bottom:10px;">
+			<thead>
+				<tr>
+					<th style="width:80px;"><?php esc_html_e( 'Initials', 'cw-management-company' ); ?></th>
+					<th><?php esc_html_e( 'Name', 'cw-management-company' ); ?></th>
+					<th><?php esc_html_e( 'Role / Description', 'cw-management-company' ); ?></th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody id="cw-mc-team-rows">
+				<?php foreach ( $members as $m ) : ?>
+				<tr class="cw-mc-team-row">
+					<td><input type="text" class="widefat tm-ini" maxlength="3" value="<?php echo esc_attr( $m['initials'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat tm-name" value="<?php echo esc_attr( $m['name'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat tm-role" value="<?php echo esc_attr( $m['role'] ?? '' ); ?>"></td>
+					<td><button type="button" class="button cw-mc-row-remove" title="Remove">&#x2715;</button></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<button type="button" class="button" id="cw-mc-team-add">
+			<?php esc_html_e( '+ Add team member', 'cw-management-company' ); ?>
+		</button>
+		<input type="hidden" name="_mkd_team_members" id="cw-mc-team-json" value="<?php echo esc_attr( $raw ?: '[]' ); ?>">
+		<?php
+	}
+
 	private function render_fields( int $post_id, array $fields ): void {
 		echo '<table class="form-table" role="presentation"><tbody>';
 
@@ -740,6 +785,33 @@ class Metaboxes {
 					];
 				}
 				update_post_meta( $post_id, '_mkd_works', wp_json_encode( $clean ) );
+			}
+		}
+
+		// Team members JSON.
+		if ( isset( $_POST['_mkd_team_members'] ) ) {
+			$json = wp_unslash( $_POST['_mkd_team_members'] );
+			$data = json_decode( $json, true );
+			if ( is_array( $data ) ) {
+				$clean = [];
+				foreach ( $data as $m ) {
+					if ( ! is_array( $m ) ) {
+						continue;
+					}
+					if ( '' === trim( $m['name'] ?? '' ) && '' === trim( $m['initials'] ?? '' ) ) {
+						continue;
+					}
+					$clean[] = [
+						'initials' => sanitize_text_field( mb_substr( $m['initials'] ?? '', 0, 3 ) ),
+						'name'     => sanitize_text_field( $m['name'] ?? '' ),
+						'role'     => sanitize_text_field( $m['role'] ?? '' ),
+					];
+				}
+				if ( $clean ) {
+					update_post_meta( $post_id, '_mkd_team_members', wp_json_encode( $clean ) );
+				} else {
+					delete_post_meta( $post_id, '_mkd_team_members' );
+				}
 			}
 		}
 	}
