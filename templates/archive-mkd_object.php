@@ -35,9 +35,11 @@ $grid_gap = class_exists( 'Codeweber_Options' ) ? Codeweber_Options::style( 'gri
 				<div class="mb-10">
 					<?php
 					echo $yandex_maps->render_map( [
-						'height'          => 450,
-						'auto_fit_bounds' => true,
-						'clusterer'       => true,
+						'height'                       => 450,
+						'auto_fit_bounds'              => true,
+						'clusterer'                    => true,
+						'route_button'                 => false,
+						'marker_open_balloon_on_click' => true,
 					], $markers );
 					?>
 				</div>

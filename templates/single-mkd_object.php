@@ -65,10 +65,12 @@ while ( have_posts() ) :
 								<h2 class="h4 mb-4"><?php esc_html_e( 'Location', 'cw-management-company' ); ?></h2>
 								<?php
 								echo $yandex_maps->render_map( [
-									'height'          => 350,
-									'zoom'             => 16,
-									'center'           => [ (float) $map_marker['latitude'], (float) $map_marker['longitude'] ],
-									'auto_fit_bounds' => false,
+									'height'                       => 350,
+									'zoom'                         => 16,
+									'center'                       => [ (float) $map_marker['latitude'], (float) $map_marker['longitude'] ],
+									'auto_fit_bounds'              => false,
+									'route_button'                 => false,
+									'marker_open_balloon_on_click' => true,
 								], [ $map_marker ] );
 								?>
 							</div>
@@ -137,9 +139,9 @@ while ( have_posts() ) :
 
 				<?php
 				$field_groups = [];
-				foreach ( Metaboxes::field_groups() as $group_label => $fields ) {
+				foreach ( Metaboxes::field_groups() as $group_key => $group_def ) {
 					$rows = [];
-					foreach ( $fields as $meta_key => $field ) {
+					foreach ( $group_def['fields'] as $meta_key => $field ) {
 						$raw       = get_post_meta( $post_id, $meta_key, true );
 						$formatted = Metaboxes::format_value( $field, (string) $raw );
 						if ( '' !== $formatted ) {
@@ -147,9 +149,29 @@ while ( have_posts() ) :
 						}
 					}
 					if ( $rows ) {
-						$field_groups[] = [ 'label' => $group_label, 'rows' => $rows ];
+						$field_groups[ $group_key ] = [ 'label' => $group_def['label'], 'rows' => $rows ];
 					}
 				}
+
+				$render_group_rows = static function ( array $rows ): void {
+					foreach ( $rows as $row ) :
+						$is_contact = ( '_mkd_responsible_person' === $row['key'] && false !== strpos( $row['value'], ',' ) );
+						?>
+						<li class="d-flex justify-content-between border-bottom py-2 gap-3">
+							<span class="text-muted"><?php echo esc_html( $row['label'] ); ?></span>
+							<?php if ( $is_contact ) :
+								[ $person_name, $person_contact ] = array_map( 'trim', explode( ',', $row['value'], 2 ) );
+								?>
+								<strong class="text-end">
+									<?php echo esc_html( $person_name ); ?><br>
+									<span class="text-muted fw-normal"><?php echo esc_html( $person_contact ); ?></span>
+								</strong>
+							<?php else : ?>
+								<strong class="text-end"><?php echo esc_html( $row['value'] ); ?></strong>
+							<?php endif; ?>
+						</li>
+					<?php endforeach;
+				};
 				?>
 				<aside class="col-lg-4">
 					<div class="card bg-pale-primary p-6 sticky-top" style="top:80px;">
@@ -158,30 +180,44 @@ while ( have_posts() ) :
 						<span class="badge bg-primary mb-4"><?php echo esc_html( $status_term->name ); ?></span>
 						<?php endif; ?>
 
-						<?php foreach ( $field_groups as $i => $group ) : ?>
-						<div class="<?php echo 0 === $i ? '' : 'mt-4 '; ?>">
-							<h3 class="h6 text-uppercase text-muted mb-2"><?php echo esc_html( $group['label'] ); ?></h3>
-							<ul class="list-unstyled mb-0">
-								<?php foreach ( $group['rows'] as $row ) :
-									$is_contact = ( '_mkd_responsible_person' === $row['key'] && false !== strpos( $row['value'], ',' ) );
-									?>
-									<li class="d-flex justify-content-between border-bottom py-2 gap-3">
-										<span class="text-muted"><?php echo esc_html( $row['label'] ); ?></span>
-										<?php if ( $is_contact ) :
-											[ $person_name, $person_contact ] = array_map( 'trim', explode( ',', $row['value'], 2 ) );
-											?>
-											<strong class="text-end">
-												<?php echo esc_html( $person_name ); ?><br>
-												<span class="text-muted fw-normal"><?php echo esc_html( $person_contact ); ?></span>
-											</strong>
-										<?php else : ?>
-											<strong class="text-end"><?php echo esc_html( $row['value'] ); ?></strong>
-										<?php endif; ?>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						</div>
-						<?php endforeach; ?>
+						<?php foreach ( $field_groups as $group_key => $group ) :
+							if ( 'technical' === $group_key ) :
+								?>
+								<div class="accordion accordion-wrapper mt-4">
+									<div class="card plain accordion-item">
+										<div class="card-header" id="cw-mc-heading-technical">
+											<button class="accordion-button collapsed"
+												data-bs-toggle="collapse"
+												data-bs-target="#cw-mc-collapse-technical"
+												aria-expanded="false"
+												aria-controls="cw-mc-collapse-technical">
+												<?php echo esc_html( $group['label'] ); ?>
+											</button>
+										</div>
+										<div id="cw-mc-collapse-technical"
+											class="accordion-collapse collapse"
+											aria-labelledby="cw-mc-heading-technical">
+											<div class="card-body">
+												<ul class="list-unstyled mb-0">
+													<?php $render_group_rows( $group['rows'] ); ?>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+								<?php
+							else :
+								?>
+								<div class="mt-4 first-group">
+									<h3 class="h6 text-uppercase text-muted mb-2"><?php echo esc_html( $group['label'] ); ?></h3>
+									<ul class="list-unstyled mb-0">
+										<?php $render_group_rows( $group['rows'] ); ?>
+									</ul>
+								</div>
+								<?php
+							endif;
+						endforeach;
+						?>
 
 					</div>
 				</aside>

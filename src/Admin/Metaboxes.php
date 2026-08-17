@@ -138,9 +138,18 @@ class Metaboxes {
 	public static function field_groups(): array {
 		$instance = new self();
 		return [
-			esc_html__( 'Address & Identification', 'cw-management-company' )  => $instance->address_fields(),
-			esc_html__( 'Technical Characteristics', 'cw-management-company' ) => $instance->technical_fields(),
-			esc_html__( 'Management', 'cw-management-company' )                => $instance->management_fields(),
+			'address'    => [
+				'label'  => esc_html__( 'Address & Identification', 'cw-management-company' ),
+				'fields' => $instance->address_fields(),
+			],
+			'technical'  => [
+				'label'  => esc_html__( 'Technical Characteristics', 'cw-management-company' ),
+				'fields' => $instance->technical_fields(),
+			],
+			'management' => [
+				'label'  => esc_html__( 'Management', 'cw-management-company' ),
+				'fields' => $instance->management_fields(),
+			],
 		];
 	}
 
