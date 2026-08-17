@@ -32,6 +32,8 @@ while ( have_posts() ) :
 	$responsible     = get_post_meta( $post_id, '_mkd_responsible_person', true );
 	$contract_date   = get_post_meta( $post_id, '_mkd_contract_date', true );
 	$contract_number = get_post_meta( $post_id, '_mkd_contract_number', true );
+	$protocol_date   = get_post_meta( $post_id, '_mkd_protocol_date', true );
+	$protocol_number = get_post_meta( $post_id, '_mkd_protocol_number', true );
 
 	$tariff_rows_raw = get_post_meta( $post_id, '_mkd_tariff_rows', true );
 	$tariff_rows     = $tariff_rows_raw ? json_decode( $tariff_rows_raw, true ) : [];
@@ -66,7 +68,7 @@ while ( have_posts() ) :
 	$status_term  = ( $status_terms && ! is_wp_error( $status_terms ) ) ? $status_terms[0] : null;
 
 	// ── Documents ─────────────────────────────────────────────────────────────
-	$documents_by_type   = class_exists( Documents::class ) ? Documents::group_by_type( Documents::query( $post_id ) ) : [];
+	$documents           = class_exists( Documents::class ) ? Documents::query( $post_id ) : [];
 	$document_years      = class_exists( Documents::class ) ? Documents::years_for_object( $post_id ) : [];
 	$document_type_terms = get_terms( [ 'taxonomy' => 'mkd_document_type', 'hide_empty' => false ] );
 
@@ -81,15 +83,18 @@ while ( have_posts() ) :
 	];
 	$wall_label = ! empty( $wall_material ) ? ( $wall_labels[ $wall_material ] ?? $wall_material ) : '';
 
+	$tariff_display = $tariff ? number_format( (float) $tariff, 2, '.', ' ' ) . ' ₽/m²' : '';
+
 	// ── Spec items ────────────────────────────────────────────────────────────
 	$spec_items = [];
-	if ( $year_built ) $spec_items[] = [ 'k' => __( 'Year Built', 'cw-management-company' ),  'v' => $year_built ];
-	if ( $floors )     $spec_items[] = [ 'k' => __( 'Floors', 'cw-management-company' ),      'v' => $floors ];
-	if ( $entrances )  $spec_items[] = [ 'k' => __( 'Entrances', 'cw-management-company' ),   'v' => $entrances ];
-	if ( $dwellings )  $spec_items[] = [ 'k' => __( 'Apartments', 'cw-management-company' ),  'v' => number_format( (int) $dwellings ) ];
-	if ( $total_area ) $spec_items[] = [ 'k' => __( 'Total Area', 'cw-management-company' ),  'v' => number_format( (float) $total_area, 0, '.', ' ' ) . ' m²' ];
-	if ( $elevators )  $spec_items[] = [ 'k' => __( 'Elevators', 'cw-management-company' ),   'v' => $elevators ];
-	if ( $wear_pct )   $spec_items[] = [ 'k' => __( 'Wear', 'cw-management-company' ),        'v' => $wear_pct . '%' ];
+	if ( $year_built )     $spec_items[] = [ 'k' => __( 'Year Built', 'cw-management-company' ),  'v' => $year_built ];
+	if ( $floors )         $spec_items[] = [ 'k' => __( 'Floors', 'cw-management-company' ),      'v' => $floors ];
+	if ( $entrances )      $spec_items[] = [ 'k' => __( 'Entrances', 'cw-management-company' ),   'v' => $entrances ];
+	if ( $dwellings )      $spec_items[] = [ 'k' => __( 'Apartments', 'cw-management-company' ),  'v' => number_format( (int) $dwellings, 0, '.', ' ' ) ];
+	if ( $total_area )     $spec_items[] = [ 'k' => __( 'Total Area', 'cw-management-company' ),  'v' => number_format( (float) $total_area, 0, '.', ' ' ) . ' m²' ];
+	if ( $elevators )      $spec_items[] = [ 'k' => __( 'Elevators', 'cw-management-company' ),   'v' => $elevators ];
+	if ( $tariff_display ) $spec_items[] = [ 'k' => __( 'Tariff', 'cw-management-company' ),      'v' => $tariff_display ];
+	if ( $wear_pct )       $spec_items[] = [ 'k' => __( 'Wear', 'cw-management-company' ),        'v' => $wear_pct . '%' ];
 
 	// ── Tariff rows (clean) ───────────────────────────────────────────────────
 	$tariff_rows_clean = array_values( array_filter( $tariff_rows, static fn( $r ) => '' !== trim( $r['name'] ?? '' ) ) );
@@ -110,18 +115,10 @@ while ( have_posts() ) :
 		return '';
 	};
 
-	$work_years        = [];
-	$work_months_found = [];
-	$months_order      = [ 'январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь' ];
-	foreach ( $works as $w ) {
-		$y = $parse_year( $w['date'] ?? '' );
-		$m = $parse_month( $w['date'] ?? '' );
-		if ( $y ) $work_years[ $y ]        = true;
-		if ( $m ) $work_months_found[ $m ] = true;
-	}
-	$work_years_list  = array_keys( $work_years );
-	rsort( $work_years_list );
-	$work_months_list = array_values( array_filter( $months_order, static fn( $m ) => isset( $work_months_found[ $m ] ) ) );
+	$months_order = [ 'январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь' ];
+
+	// Status tone: accent (done), warning (in progress), muted (not started yet).
+	$tone_class = [ 'accent' => 'done', 'warning' => 'plan', 'muted' => 'neutral' ];
 
 	// ── Emergency card ────────────────────────────────────────────────────────
 	$emergency_phone = get_post_meta( $post_id, '_mkd_emergency_phone', true );
@@ -158,7 +155,6 @@ while ( have_posts() ) :
 					if ( $city ) $badges[] = [ 'text' => $city, 'mod' => 'primary' ];
 					$ws = implode( ', ', array_filter( [ $wall_label, $series ] ) );
 					if ( $ws ) $badges[] = [ 'text' => $ws, 'mod' => 'muted' ];
-					if ( $status_term ) $badges[] = [ 'text' => $status_term->name, 'mod' => 'muted' ];
 					if ( $contract_date ) {
 						$badges[] = [
 							'text' => sprintf(
@@ -169,6 +165,7 @@ while ( have_posts() ) :
 							'mod' => 'muted',
 						];
 					}
+					if ( $status_term ) $badges[] = [ 'text' => $status_term->name, 'mod' => 'muted' ];
 					?>
 					<?php if ( $badges ) : ?>
 					<div class="cw-mc-badges">
@@ -248,29 +245,34 @@ while ( have_posts() ) :
 				<?php if ( $show_tariff ) : ?>
 				<div>
 					<h2 class="cw-mc-h2">
-						<?php if ( $tariff ) :
+						<?php if ( $tariff_display ) :
 							printf(
 								/* translators: %s: tariff amount with unit */
 								esc_html__( 'Tariff Breakdown — %s', 'cw-management-company' ),
-								esc_html( number_format( (float) $tariff, 2, '.', ' ' ) . ' ₽/m²' )
+								esc_html( $tariff_display )
 							);
 						else :
 							esc_html_e( 'Tariff Breakdown', 'cw-management-company' );
 						endif; ?>
 					</h2>
-					<?php if ( $contract_date ) : ?>
+					<?php
+					// Prefer the general meeting protocol; fall back to the management contract.
+					$meeting_date   = $protocol_date ?: $contract_date;
+					$meeting_number = $protocol_date ? $protocol_number : $contract_number;
+					?>
+					<?php if ( $meeting_date ) : ?>
 					<p class="cw-mc-tariff-meta">
 						<?php
 						$meta_str = sprintf(
 							/* translators: %s: meeting date */
 							__( 'Approved at general meeting on %s', 'cw-management-company' ),
-							mysql2date( get_option( 'date_format' ), $contract_date )
+							mysql2date( get_option( 'date_format' ), $meeting_date )
 						);
-						if ( $contract_number ) {
+						if ( $meeting_number ) {
 							$meta_str .= ', ' . sprintf(
 								/* translators: %s: protocol number */
 								__( 'protocol № %s', 'cw-management-company' ),
-								$contract_number
+								$meeting_number
 							);
 						}
 						echo esc_html( $meta_str ) . '.';
@@ -280,22 +282,20 @@ while ( have_posts() ) :
 					<?php if ( $tariff_rows_clean ) : ?>
 					<div class="cw-mc-tariff-card">
 						<?php foreach ( $tariff_rows_clean as $trow ) :
-							$pct = min( 100, max( 0, (float) ( $trow['pct'] ?? 0 ) ) );
+							$pct = min( 100, max( 0, (float) str_replace( [ '%', ',' ], [ '', '.' ], (string) ( $trow['pct'] ?? 0 ) ) ) );
 						?>
 						<div class="cw-mc-tariff-row">
 							<div class="cw-mc-tariff-row__name"><?php echo esc_html( $trow['name'] ); ?></div>
-							<div class="cw-mc-tariff-row__val">
-								<?php if ( ! empty( $trow['val'] ) ) echo esc_html( $trow['val'] ) . ' ₽'; ?>
-							</div>
+							<div class="cw-mc-tariff-row__val"><?php echo esc_html( $trow['val'] ?? '' ); ?></div>
 							<div class="cw-mc-tariff-row__track">
 								<div class="cw-mc-tariff-row__fill" style="--w:<?php echo esc_attr( $pct ); ?>%"></div>
 							</div>
 						</div>
 						<?php endforeach; ?>
-						<?php if ( $tariff ) : ?>
+						<?php if ( $tariff_display ) : ?>
 						<div class="cw-mc-tariff-total">
 							<span><?php esc_html_e( 'Total', 'cw-management-company' ); ?></span>
-							<span><?php echo esc_html( number_format( (float) $tariff, 2, '.', ' ' ) . ' ₽/m² ' . __( 'per month', 'cw-management-company' ) ); ?></span>
+							<span><?php echo esc_html( $tariff_display . ' ' . __( 'per month', 'cw-management-company' ) ); ?></span>
 						</div>
 						<?php endif; ?>
 					</div>
@@ -364,30 +364,14 @@ while ( have_posts() ) :
 				<?php endif; ?>
 			</div>
 
-			<?php if ( $work_years_list || $work_months_list ) : ?>
 			<div class="cw-mc-works-meta">
-				<?php if ( $work_years_list ) : ?>
-				<select class="cw-mc-select" id="cw-mc-filter-year" aria-label="<?php esc_attr_e( 'Filter by year', 'cw-management-company' ); ?>">
-					<option value=""><?php esc_html_e( 'All years', 'cw-management-company' ); ?></option>
-					<?php foreach ( $work_years_list as $wy ) : ?>
-					<option value="<?php echo esc_attr( $wy ); ?>"><?php echo esc_html( $wy . ' ' . __( 'year', 'cw-management-company' ) ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<?php endif; ?>
-				<?php if ( $work_months_list ) : ?>
-				<select class="cw-mc-select" id="cw-mc-filter-month" aria-label="<?php esc_attr_e( 'Filter by month', 'cw-management-company' ); ?>">
-					<option value=""><?php esc_html_e( 'All months', 'cw-management-company' ); ?></option>
-					<?php foreach ( $work_months_list as $wm ) : ?>
-					<option value="<?php echo esc_attr( $wm ); ?>"><?php echo esc_html( $wm ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<?php endif; ?>
+				<select class="cw-mc-select" id="cw-mc-filter-year" aria-label="<?php esc_attr_e( 'Filter by year', 'cw-management-company' ); ?>" hidden></select>
+				<select class="cw-mc-select" id="cw-mc-filter-month" aria-label="<?php esc_attr_e( 'Filter by month', 'cw-management-company' ); ?>" hidden></select>
 				<span class="cw-mc-works-count" id="cw-mc-works-count" aria-live="polite"></span>
 			</div>
-			<?php endif; ?>
 
 			<?php
-			$render_pane = static function ( array $list, string $id, bool $active ) use ( $parse_year, $parse_month ) {
+			$render_pane = static function ( array $list, string $id, bool $active ) use ( $parse_year, $parse_month, $tone_class ) {
 				if ( ! $list ) return;
 				?>
 				<div id="<?php echo esc_attr( $id ); ?>" class="cw-mc-works-pane<?php echo $active ? '' : ' d-none'; ?>">
@@ -398,7 +382,8 @@ while ( have_posts() ) :
 							$s_text  = ! empty( $w['status'] )
 								? $w['status']
 								: ( $is_done ? __( 'Completed', 'cw-management-company' ) : __( 'Planned', 'cw-management-company' ) );
-							$s_mod   = $is_done ? 'done' : 'plan';
+							$tone    = $w['tone'] ?? ( $is_done ? 'accent' : 'warning' );
+							$s_mod   = $tone_class[ $tone ] ?? 'plan';
 							$wy      = $parse_year( $w['date'] ?? '' );
 							$wm      = $parse_month( $w['date'] ?? '' );
 						?>
@@ -431,9 +416,11 @@ while ( have_posts() ) :
 			}
 			?>
 
+			<button type="button" class="cw-mc-works-more" id="cw-mc-works-more" hidden></button>
+
 			<p class="cw-mc-works-note">
 				<?php esc_html_e( 'Full list of works for all management years — in annual reports in the', 'cw-management-company' ); ?>
-				<?php if ( $documents_by_type || $document_years ) : ?>
+				<?php if ( $documents ) : ?>
 				<a href="#docs"><?php esc_html_e( 'documents section', 'cw-management-company' ); ?></a>
 				<?php else : ?>
 				<?php esc_html_e( 'documents section', 'cw-management-company' ); ?>
@@ -445,12 +432,12 @@ while ( have_posts() ) :
 	<?php endif; ?>
 
 	<?php /* ════════════════════════════════════════ 4. DOCUMENTS + EMERGENCY */ ?>
-	<?php if ( $documents_by_type || $document_years || $show_emergency ) : ?>
+	<?php if ( $documents || $document_years || $show_emergency ) : ?>
 	<section class="cw-mc-s" id="docs">
 		<div class="cw-mc-wrap">
 			<?php
-			$has_docs     = (bool) ( $documents_by_type || $document_years );
-			$use_2col     = $has_docs && $show_emergency;
+			$has_docs = (bool) ( $documents || $document_years );
+			$use_2col = $has_docs && $show_emergency;
 
 			$render_doc_filter = static function () use ( $document_type_terms, $document_years ) {
 				if ( ( $document_type_terms && ! is_wp_error( $document_type_terms ) && count( $document_type_terms ) > 1 ) || count( $document_years ) > 1 ) {
@@ -481,7 +468,7 @@ while ( have_posts() ) :
 				?>
 				<div class="cw-mc-emergency-card">
 					<div class="cw-mc-emergency-card__header">
-						<h3 class="cw-mc-emergency-card__title"><?php esc_html_e( 'What to Do in an Emergency', 'cw-management-company' ); ?></h3>
+						<h2 class="cw-mc-emergency-card__title"><?php esc_html_e( 'What to Do in an Emergency', 'cw-management-company' ); ?></h2>
 						<?php if ( $emergency_phone ) : ?>
 						<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $emergency_phone ) ); ?>" class="cw-mc-emergency-card__phone">
 							<?php echo esc_html( $emergency_phone ); ?>
@@ -511,20 +498,20 @@ while ( have_posts() ) :
 			<?php if ( $use_2col ) : ?>
 			<div class="cw-mc-docs-grid">
 				<div>
-					<h2 class="cw-mc-h2 mb-4"><?php esc_html_e( 'Documents', 'cw-management-company' ); ?></h2>
+					<h2 class="cw-mc-h2"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
 					<?php $render_doc_filter(); ?>
 					<div id="cw-mc-documents-list">
-						<?php echo Documents::render_list( $documents_by_type ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo Documents::render_list( $documents ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</div>
 				</div>
 				<div><?php $render_emergency_card(); ?></div>
 			</div>
 
 			<?php elseif ( $has_docs ) : ?>
-			<h2 class="cw-mc-h2 mb-5"><?php esc_html_e( 'Documents', 'cw-management-company' ); ?></h2>
+			<h2 class="cw-mc-h2"><?php esc_html_e( 'Building Documents', 'cw-management-company' ); ?></h2>
 			<?php $render_doc_filter(); ?>
 			<div id="cw-mc-documents-list">
-				<?php echo Documents::render_list( $documents_by_type ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo Documents::render_list( $documents ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
 
 			<?php else : ?>
@@ -537,27 +524,79 @@ while ( have_posts() ) :
 
 </div><?php /* .cw-mc-page */ ?>
 
+<?php if ( $works_done || $works_plan ) : ?>
 <script>
 (function () {
-	// ── Works tabs ────────────────────────────────────────────────────────────
-	var tabBtns = document.querySelectorAll('#cw-mc-works-tabs .cw-mc-tab-btn');
-	if (tabBtns.length) {
-		tabBtns.forEach(function (btn) {
-			btn.addEventListener('click', function () {
-				tabBtns.forEach(function (b) { b.classList.remove('is-active'); });
-				btn.classList.add('is-active');
-				document.querySelectorAll('.cw-mc-works-pane').forEach(function (p) { p.classList.add('d-none'); });
-				var pane = document.getElementById('cw-mc-pane-' + btn.dataset.tab);
-				if (pane) pane.classList.remove('d-none');
-				applyFilter();
-			});
-		});
-	}
+	var CFG = <?php echo wp_json_encode( [
+		'page'      => 5,
+		'order'     => $months_order,
+		'allYears'  => __( 'All years', 'cw-management-company' ),
+		'allMonths' => __( 'All months', 'cw-management-company' ),
+		// Slavic plural forms: [1, 2-4, 5-20]. %d is replaced with the count.
+		'works'     => [
+			_x( '%d work',  'plural form for 1, 21, 31…',      'cw-management-company' ),
+			_x( '%d works', 'plural form for 2-4, 22-24…',     'cw-management-company' ),
+			_x( '%d works', 'plural form for 5-20, 25-30…',    'cw-management-company' ),
+		],
+		'planned'   => [
+			_x( '%d work planned',   'plural form for 1, 21, 31…',   'cw-management-company' ),
+			_x( '%d works planned',  'plural form for 2-4, 22-24…',  'cw-management-company' ),
+			_x( '%d works planned',  'plural form for 5-20, 25-30…', 'cw-management-company' ),
+		],
+		'more'      => [
+			_x( 'Show %d more work',  'plural form for 1, 21, 31…',   'cw-management-company' ),
+			_x( 'Show %d more works', 'plural form for 2-4, 22-24…',  'cw-management-company' ),
+			_x( 'Show %d more works', 'plural form for 5-20, 25-30…', 'cw-management-company' ),
+		],
+		'thousand'  => _x( 'k ₽', 'thousands of roubles', 'cw-management-company' ),
+		'million'   => _x( 'M ₽', 'millions of roubles',  'cw-management-company' ),
+	] ); ?>;
 
-	// ── Works filter ─────────────────────────────────────────────────────────
 	var yearSel  = document.getElementById('cw-mc-filter-year');
 	var monthSel = document.getElementById('cw-mc-filter-month');
 	var counter  = document.getElementById('cw-mc-works-count');
+	var moreBtn  = document.getElementById('cw-mc-works-more');
+	var tabBtns  = document.querySelectorAll('#cw-mc-works-tabs .cw-mc-tab-btn');
+
+	// null = not chosen yet (falls back to "all"), '' = explicitly "all".
+	var state = { year: null, month: null, limit: CFG.page };
+
+	function activePane() { return document.querySelector('.cw-mc-works-pane:not(.d-none)'); }
+
+	function isPlanTab() {
+		var active = document.querySelector('#cw-mc-works-tabs .cw-mc-tab-btn.is-active');
+		return !!active && 'plan' === active.dataset.tab;
+	}
+
+	function paneRows() {
+		var pane = activePane();
+		return pane ? Array.prototype.slice.call(pane.querySelectorAll('.cw-mc-work-row')) : [];
+	}
+
+	function uniq(list) {
+		return list.filter(function (v, i) { return v && list.indexOf(v) === i; });
+	}
+
+	function fill(select, options, selected) {
+		select.innerHTML = '';
+		options.forEach(function (o) {
+			var el = document.createElement('option');
+			el.value = o.value;
+			el.textContent = o.label;
+			if (o.value === selected) el.selected = true;
+			select.appendChild(el);
+		});
+	}
+
+	function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+	function plural(n, forms) {
+		var m10 = n % 10, m100 = n % 100, form;
+		if (m10 === 1 && m100 !== 11) form = forms[0];
+		else if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) form = forms[1];
+		else form = forms[2];
+		return form.replace('%d', n);
+	}
 
 	function parseCost(str) {
 		if (!str) return 0;
@@ -565,50 +604,131 @@ while ( have_posts() ) :
 		return isNaN(n) ? 0 : n;
 	}
 
-	function plural(n, one, few, many) {
-		var mod10 = n % 10, mod100 = n % 100;
-		if (mod10 === 1 && mod100 !== 11) return one;
-		if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
-		return many;
+	function formatMoney(total) {
+		if (total >= 1000000) return (Math.round(total / 100000) / 10) + ' ' + CFG.million;
+		if (total >= 1000)    return Math.round(total / 1000) + ' ' + CFG.thousand;
+		return total + ' ₽';
 	}
 
-	function applyFilter() {
-		var year  = yearSel  ? yearSel.value  : '';
-		var month = monthSel ? monthSel.value : '';
+	function refresh() {
+		var plan = isPlanTab();
+		var rows = paneRows();
 
-		document.querySelectorAll('.cw-mc-work-row').forEach(function (row) {
-			var ok = (!year || row.dataset.year === year) && (!month || row.dataset.month === month);
+		// ── Year select ──────────────────────────────────────────────────────
+		var years = uniq(rows.map(function (r) { return r.dataset.year; })).sort().reverse();
+		var showYear = !plan && years.length > 1;
+		yearSel.hidden = !showYear;
+		if (showYear) {
+			// Default to every year, so the list opens full and pagination does the trimming.
+			if (state.year === null || ( state.year && years.indexOf(state.year) === -1 )) state.year = '';
+			fill(
+				yearSel,
+				[{ value: '', label: CFG.allYears }].concat(years.map(function (y) {
+					return { value: y, label: y };
+				})),
+				state.year
+			);
+		} else {
+			state.year = '';
+		}
+
+		// ── Month select (only meaningful once a single year is picked) ──────
+		var scoped = rows.filter(function (r) { return !state.year || r.dataset.year === state.year; });
+		var months = uniq(scoped.map(function (r) { return r.dataset.month; })).sort(function (a, b) {
+			return CFG.order.indexOf(a) - CFG.order.indexOf(b);
+		});
+		var showMonth = !plan && !!state.year && months.length > 1;
+		monthSel.hidden = !showMonth;
+		if (showMonth) {
+			if (state.month === null || (state.month && months.indexOf(state.month) === -1)) {
+				state.month = '';
+			}
+			fill(
+				monthSel,
+				[{ value: '', label: CFG.allMonths }].concat(months.map(function (m) {
+					return { value: m, label: capitalize(m) };
+				})),
+				state.month
+			);
+		} else {
+			state.month = '';
+		}
+
+		// ── Filter + paginate ────────────────────────────────────────────────
+		var matched = [];
+		rows.forEach(function (row) {
+			var ok = (!state.year || row.dataset.year === state.year) &&
+			         (!state.month || row.dataset.month === state.month);
+			if (ok) matched.push(row);
 			row.classList.toggle('cw-mc-hidden', !ok);
 		});
+		matched.forEach(function (row, i) {
+			if (i >= state.limit) row.classList.add('cw-mc-hidden');
+		});
 
-		if (!counter) return;
-		var activePane = document.querySelector('.cw-mc-works-pane:not(.d-none)');
-		if (!activePane) return;
-		var visible = activePane.querySelectorAll('.cw-mc-work-row:not(.cw-mc-hidden)');
-		var count = visible.length;
-		var total = 0;
-		visible.forEach(function (r) { total += parseCost(r.dataset.cost || ''); });
+		// Rows in the inactive pane must never leak into the layout.
+		document.querySelectorAll('.cw-mc-works-pane.d-none .cw-mc-work-row').forEach(function (row) {
+			row.classList.add('cw-mc-hidden');
+		});
 
-		if (!count) { counter.textContent = ''; return; }
-		var label = plural(count, 'работа', 'работы', 'работ');
-		var text  = count + ' ' + label;
-		if (total > 0) {
-			var tStr = total >= 1000000
-				? (Math.round(total / 100000) / 10) + ' млн. ₽'
-				: total >= 1000
-				? Math.round(total / 1000) + ' тыс. ₽'
-				: total + ' ₽';
-			text += ' · ' + tStr;
+		// ── Counter ──────────────────────────────────────────────────────────
+		if (counter) {
+			if (!matched.length) {
+				counter.textContent = '';
+			} else if (plan) {
+				counter.textContent = plural(matched.length, CFG.planned);
+			} else {
+				var total = matched.reduce(function (sum, r) { return sum + parseCost(r.dataset.cost || ''); }, 0);
+				counter.textContent = plural(matched.length, CFG.works) + (total > 0 ? ' · ' + formatMoney(total) : '');
+			}
 		}
-		counter.textContent = text;
+
+		// ── "Show more" button ───────────────────────────────────────────────
+		if (moreBtn) {
+			var rest = matched.length - state.limit;
+			moreBtn.hidden = rest <= 0;
+			if (rest > 0) moreBtn.textContent = plural(rest, CFG.more);
+		}
 	}
 
-	if (yearSel)  yearSel.addEventListener('change',  applyFilter);
-	if (monthSel) monthSel.addEventListener('change', applyFilter);
+	tabBtns.forEach(function (btn) {
+		btn.addEventListener('click', function () {
+			tabBtns.forEach(function (b) { b.classList.remove('is-active'); });
+			btn.classList.add('is-active');
+			document.querySelectorAll('.cw-mc-works-pane').forEach(function (p) { p.classList.add('d-none'); });
+			var pane = document.getElementById('cw-mc-pane-' + btn.dataset.tab);
+			if (pane) pane.classList.remove('d-none');
+			state.year = null;
+			state.month = null;
+			state.limit = CFG.page;
+			refresh();
+		});
+	});
 
-	applyFilter();
+	yearSel.addEventListener('change', function () {
+		state.year = yearSel.value;
+		state.month = null;
+		state.limit = CFG.page;
+		refresh();
+	});
+
+	monthSel.addEventListener('change', function () {
+		state.month = monthSel.value;
+		state.limit = CFG.page;
+		refresh();
+	});
+
+	if (moreBtn) {
+		moreBtn.addEventListener('click', function () {
+			state.limit += CFG.page;
+			refresh();
+		});
+	}
+
+	refresh();
 })();
 </script>
+<?php endif; ?>
 
 <?php endwhile; ?>
 <?php get_footer(); ?>

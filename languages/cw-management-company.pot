@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-16T21:44:58+00:00\n"
+"POT-Creation-Date: 2026-08-17T11:58:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: cw-management-company\n"
@@ -35,7 +35,7 @@ msgstr ""
 
 #: src/Admin/DocumentMetaboxes.php:48
 #: src/Admin/EventMetabox.php:18
-#: src/Plugin.php:139
+#: src/Plugin.php:170
 msgid "Property"
 msgstr ""
 
@@ -52,6 +52,7 @@ msgid "Select file"
 msgstr ""
 
 #: src/Admin/DocumentMetaboxes.php:75
+#: src/Admin/Metaboxes.php:477
 msgid "Remove"
 msgstr ""
 
@@ -60,6 +61,7 @@ msgid "Date / Period"
 msgstr ""
 
 #: src/Admin/DocumentMetaboxes.php:89
+#: src/Admin/Metaboxes.php:539
 msgid "Cost"
 msgstr ""
 
@@ -72,239 +74,445 @@ msgid "Link this event to a property — e.g. an owners meeting for a specific b
 msgstr ""
 
 #: src/Admin/Metaboxes.php:18
-#: src/Admin/Metaboxes.php:141
+#: src/Admin/Metaboxes.php:188
 msgid "Address & Identification"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:26
-#: src/Admin/Metaboxes.php:142
+#: src/Admin/Metaboxes.php:192
 msgid "Technical Characteristics"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:34
-#: templates/single-mkd_object.php:65
 msgid "Location"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:42
-#: src/Admin/Metaboxes.php:143
+#: src/Admin/Metaboxes.php:196
 msgid "Management"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:56
-msgid "Address"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:57
-msgid "Cadastral Number"
+#: src/Admin/Metaboxes.php:50
+msgid "Gallery (Yard & Entrance photos)"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:58
-msgid "GIS ZHKH Code"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:64
-msgid "Panel"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:65
-msgid "Brick"
+#: templates/single-mkd_object.php:255
+msgid "Tariff Breakdown"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:66
-msgid "Monolith"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:67
-msgid "Block"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:68
-msgid "Wood"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:69
-#: src/Documents.php:48
-#: src/Plugin.php:330
-msgid "Other"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:72
-#: src/Admin/Metaboxes.php:77
-msgid "Central"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:73
-msgid "Autonomous"
+msgid "Works History"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:74
-#: src/Admin/Metaboxes.php:79
-#: src/Admin/Metaboxes.php:84
-msgid "None"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:78
-msgid "Bottled"
+msgid "Assigned Team"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:82
-msgid "Natural"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:83
-msgid "Supply & Exhaust"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:88
-msgid "Year Built"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:89
-msgid "Wall Material"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:90
-msgid "Building Series"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:91
-msgid "Floors"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:92
-msgid "Entrances"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:93
-msgid "Dwelling Units"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:94
-msgid "Non-Residential Units"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:95
-msgid "Total Area, m²"
+msgid "Emergency Card"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:96
-msgid "Living Area, m²"
+msgid "Address"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:97
-msgid "Common Property Area, m²"
+msgid "City / District"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:98
-msgid "Land Plot Area, m²"
+msgid "Cadastral Number"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:99
-msgid "Elevators"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:100
-msgid "Garbage Chute"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:101
-msgid "Heating"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:102
-msgid "Hot Water Supply"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:103
-msgid "Cold Water Supply"
-msgstr ""
-
-#: src/Admin/Metaboxes.php:104
-msgid "Sewage"
+msgid "GIS ZHKH Code"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:105
-msgid "Electricity Supply"
+#: templates/single-mkd_object.php:77
+msgid "Panel"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:106
-msgid "Gas Supply"
+#: templates/single-mkd_object.php:78
+msgid "Brick"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:107
-msgid "Ventilation"
+#: templates/single-mkd_object.php:79
+msgid "Monolith"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:108
+#: templates/single-mkd_object.php:80
+msgid "Block"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:109
+#: templates/single-mkd_object.php:81
+msgid "Wood"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:110
+#: src/Plugin.php:361
+#: templates/single-mkd_object.php:82
+msgid "Other"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:113
-msgid "Management Contract Number"
+#: src/Admin/Metaboxes.php:118
+msgid "Central"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:114
-msgid "Contract Date"
+msgid "Autonomous"
 msgstr ""
 
 #: src/Admin/Metaboxes.php:115
+#: src/Admin/Metaboxes.php:120
+#: src/Admin/Metaboxes.php:125
+msgid "None"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:119
+msgid "Bottled"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:123
+msgid "Natural"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:124
+msgid "Supply & Exhaust"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:129
+#: templates/single-mkd_object.php:90
+msgid "Year Built"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:130
+msgid "Wall Material"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:131
+msgid "Building Series"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:132
+#: templates/single-mkd_object.php:91
+msgid "Floors"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:133
+#: templates/single-mkd_object.php:92
+msgid "Entrances"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:134
+msgid "Dwelling Units"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:135
+msgid "Non-Residential Units"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:136
+msgid "Total Area, m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:137
+msgid "Living Area, m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:138
+msgid "Common Property Area, m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:139
+msgid "Land Plot Area, m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:140
+#: templates/single-mkd_object.php:95
+msgid "Elevators"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:141
+msgid "Garbage Chute"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:142
+msgid "Wear, %"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:143
+msgid "Heating"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:144
+msgid "Hot Water Supply"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:145
+msgid "Cold Water Supply"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:146
+msgid "Sewage"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:147
+msgid "Electricity Supply"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:148
+msgid "Gas Supply"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:149
+msgid "Ventilation"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:155
+msgid "Management Contract Number"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:156
+msgid "Contract Date"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:157
 msgid "Contract Term"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:117
+#: src/Admin/Metaboxes.php:159
 msgid "Management Method"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:120
+#: src/Admin/Metaboxes.php:162
 msgid "Management Company"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:121
+#: src/Admin/Metaboxes.php:163
 msgid "Homeowners Association (HOA)"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:122
+#: src/Admin/Metaboxes.php:164
 msgid "Direct Management by Owners"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:125
+#: src/Admin/Metaboxes.php:167
 msgid "Building Representative (Contact)"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:155
+#: src/Admin/Metaboxes.php:168
+msgid "General Meeting Protocol Number"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:169
+msgid "General Meeting Protocol Date"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:170
+msgid "Management Tariff, ₽/m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:171
+msgid "Dispatcher Phone"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:172
+msgid "Reception Hours"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:210
 msgid "Yes"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:155
+#: src/Admin/Metaboxes.php:210
 msgid "No"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:195
+#: src/Admin/Metaboxes.php:250
 msgid "Click on the map to set the property location, or use the search field."
 msgstr ""
 
-#: src/Admin/Metaboxes.php:200
+#: src/Admin/Metaboxes.php:255
 msgid "Search address..."
 msgstr ""
 
-#: src/Admin/Metaboxes.php:341
+#: src/Admin/Metaboxes.php:396
 msgid "Yandex API key is not set. Please configure it in Theme Options > API > Yandex API Key."
 msgstr ""
 
-#: src/Admin/Metaboxes.php:348
+#: src/Admin/Metaboxes.php:403
 msgid "Latitude"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:355
+#: src/Admin/Metaboxes.php:410
 msgid "Longitude"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:362
+#: src/Admin/Metaboxes.php:417
 msgid "Zoom"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:369
+#: src/Admin/Metaboxes.php:424
 msgid "Address (from map)"
 msgstr ""
 
-#: src/Admin/Metaboxes.php:390
+#: src/Admin/Metaboxes.php:438
+msgid "Featured Image = facade photo (set in the right sidebar). Here — two additional slots."
+msgstr ""
+
+#: src/Admin/Metaboxes.php:444
+#: templates/single-mkd_object.php:215
+#: templates/single-mkd_object.php:219
+msgid "Yard"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:449
+msgid "Entrance / Lobby"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:466
+msgid "No image"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:473
+msgid "Replace"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:473
+msgid "Select Image"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:493
+msgid "Tariff breakdown items shown on the single page. Name, rate (₽/m²), share (%)."
+msgstr ""
+
+#: src/Admin/Metaboxes.php:498
+#: src/Admin/Metaboxes.php:593
+msgid "Name"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:499
+msgid "₽/m²"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:500
+msgid "%"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:516
+msgid "+ Add row"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:530
+msgid "Works history: completed and planned. Displayed on the single page with tab/year/month filters."
+msgstr ""
+
+#: src/Admin/Metaboxes.php:535
+msgid "Type"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:536
+msgid "Date"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:537
+msgid "Title"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:538
+msgid "Detail"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:540
+#: src/Plugin.php:215
+#: src/Plugin.php:218
+msgid "Status"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:541
+msgid "Status color"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:550
+msgid "Done"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:551
+msgid "Plan"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:562
+msgid "Green"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:563
+msgid "Amber"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:564
+msgid "Grey"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:573
+msgid "+ Add work"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:587
+msgid "Team members displayed in the contact card. Initials: up to 3 characters (e.g. \"АГ\", \"№2\")."
+msgstr ""
+
+#: src/Admin/Metaboxes.php:592
+msgid "Initials"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:594
+msgid "Role / Description"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:610
+msgid "+ Add team member"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:626
+msgid "Emergency card shown next to the documents section. Shows dispatcher phone and step-by-step instructions for common emergencies."
+msgstr ""
+
+#: src/Admin/Metaboxes.php:630
+msgid "Emergency Phone"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:634
+msgid "Footer Note"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:637
+msgid "Small green note at the bottom, e.g. \"In case of gas smell — call 104 first...\""
+msgstr ""
+
+#: src/Admin/Metaboxes.php:641
+msgid "Emergency Situations"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:645
+msgid "Situation"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:646
+msgid "Instructions"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:661
+msgid "+ Add situation"
+msgstr ""
+
+#: src/Admin/Metaboxes.php:679
 msgid "— not specified —"
 msgstr ""
 
@@ -312,240 +520,231 @@ msgstr ""
 msgid "Invalid property."
 msgstr ""
 
-#: src/Documents.php:94
+#: src/Documents.php:76
 msgid "No documents found."
 msgstr ""
 
-#: src/Documents.php:118
-msgid "Download"
-msgstr ""
-
-#: src/Plugin.php:116
+#: src/Plugin.php:147
 msgid "View property"
 msgstr ""
 
-#: src/Plugin.php:138
-#: src/Plugin.php:140
-#: src/Plugin.php:153
+#: src/Plugin.php:169
+#: src/Plugin.php:171
+#: src/Plugin.php:184
+#: templates/single-mkd_object.php:145
 msgid "Properties"
 msgstr ""
 
-#: src/Plugin.php:141
+#: src/Plugin.php:172
 msgid "All Properties"
 msgstr ""
 
-#: src/Plugin.php:142
-#: src/Plugin.php:214
+#: src/Plugin.php:173
+#: src/Plugin.php:245
 msgid "Add New"
 msgstr ""
 
-#: src/Plugin.php:143
+#: src/Plugin.php:174
 msgid "Add New Property"
 msgstr ""
 
-#: src/Plugin.php:144
+#: src/Plugin.php:175
 msgid "Edit Property"
 msgstr ""
 
-#: src/Plugin.php:145
+#: src/Plugin.php:176
 msgid "New Property"
 msgstr ""
 
-#: src/Plugin.php:146
+#: src/Plugin.php:177
 msgid "View Property"
 msgstr ""
 
-#: src/Plugin.php:147
+#: src/Plugin.php:178
 msgid "Search Properties"
 msgstr ""
 
-#: src/Plugin.php:148
+#: src/Plugin.php:179
 msgid "No properties found"
 msgstr ""
 
-#: src/Plugin.php:149
+#: src/Plugin.php:180
 msgid "No properties found in trash"
 msgstr ""
 
-#: src/Plugin.php:184
-#: src/Plugin.php:187
-msgid "Status"
-msgstr ""
-
-#: src/Plugin.php:186
+#: src/Plugin.php:217
 msgid "Statuses"
 msgstr ""
 
-#: src/Plugin.php:188
+#: src/Plugin.php:219
 msgid "All Statuses"
 msgstr ""
 
-#: src/Plugin.php:189
+#: src/Plugin.php:220
 msgid "Add New Status"
 msgstr ""
 
-#: src/Plugin.php:190
+#: src/Plugin.php:221
 msgid "Edit Status"
 msgstr ""
 
-#: src/Plugin.php:191
+#: src/Plugin.php:222
 msgid "New Status"
 msgstr ""
 
-#: src/Plugin.php:192
+#: src/Plugin.php:223
 msgid "Search Statuses"
 msgstr ""
 
-#: src/Plugin.php:193
+#: src/Plugin.php:224
 msgid "No statuses found"
 msgstr ""
 
-#: src/Plugin.php:210
-#: src/Plugin.php:212
-#: src/Plugin.php:224
-#: templates/single-mkd_object.php:82
+#: src/Plugin.php:241
+#: src/Plugin.php:243
+#: src/Plugin.php:255
 msgid "Documents"
 msgstr ""
 
-#: src/Plugin.php:211
+#: src/Plugin.php:242
 msgid "Document"
 msgstr ""
 
-#: src/Plugin.php:213
+#: src/Plugin.php:244
 msgid "All Documents"
 msgstr ""
 
-#: src/Plugin.php:215
+#: src/Plugin.php:246
 msgid "Add New Document"
 msgstr ""
 
-#: src/Plugin.php:216
+#: src/Plugin.php:247
 msgid "Edit Document"
 msgstr ""
 
-#: src/Plugin.php:217
+#: src/Plugin.php:248
 msgid "New Document"
 msgstr ""
 
-#: src/Plugin.php:218
+#: src/Plugin.php:249
 msgid "Search Documents"
 msgstr ""
 
-#: src/Plugin.php:219
+#: src/Plugin.php:250
 msgid "No documents found"
 msgstr ""
 
-#: src/Plugin.php:220
+#: src/Plugin.php:251
 msgid "No documents found in trash"
 msgstr ""
 
-#: src/Plugin.php:255
-#: src/Plugin.php:258
+#: src/Plugin.php:286
+#: src/Plugin.php:289
 msgid "Document Type"
 msgstr ""
 
-#: src/Plugin.php:257
+#: src/Plugin.php:288
 msgid "Document Types"
 msgstr ""
 
-#: src/Plugin.php:259
+#: src/Plugin.php:290
 msgid "All Types"
 msgstr ""
 
-#: src/Plugin.php:260
+#: src/Plugin.php:291
 msgid "Add New Type"
 msgstr ""
 
-#: src/Plugin.php:261
+#: src/Plugin.php:292
 msgid "Edit Type"
 msgstr ""
 
-#: src/Plugin.php:262
+#: src/Plugin.php:293
 msgid "New Type"
 msgstr ""
 
-#: src/Plugin.php:263
+#: src/Plugin.php:294
 msgid "Search Types"
 msgstr ""
 
-#: src/Plugin.php:264
+#: src/Plugin.php:295
 msgid "No types found"
 msgstr ""
 
-#: src/Plugin.php:280
-#: src/Plugin.php:283
+#: src/Plugin.php:311
+#: src/Plugin.php:314
 msgid "Work Category"
 msgstr ""
 
-#: src/Plugin.php:282
+#: src/Plugin.php:313
 msgid "Work Categories"
 msgstr ""
 
-#: src/Plugin.php:284
+#: src/Plugin.php:315
 msgid "All Categories"
 msgstr ""
 
-#: src/Plugin.php:285
+#: src/Plugin.php:316
 msgid "Add New Category"
 msgstr ""
 
-#: src/Plugin.php:286
+#: src/Plugin.php:317
 msgid "Edit Category"
 msgstr ""
 
-#: src/Plugin.php:287
+#: src/Plugin.php:318
 msgid "New Category"
 msgstr ""
 
-#: src/Plugin.php:288
+#: src/Plugin.php:319
 msgid "Search Categories"
 msgstr ""
 
-#: src/Plugin.php:289
+#: src/Plugin.php:320
 msgid "No categories found"
 msgstr ""
 
-#: src/Plugin.php:316
+#: src/Plugin.php:347
 msgid "In Management"
 msgstr ""
 
-#: src/Plugin.php:317
+#: src/Plugin.php:348
 msgid "Emergency"
 msgstr ""
 
-#: src/Plugin.php:318
+#: src/Plugin.php:349
 msgid "Removed from Management"
 msgstr ""
 
-#: src/Plugin.php:327
+#: src/Plugin.php:358
 msgid "Work Act"
 msgstr ""
 
-#: src/Plugin.php:328
+#: src/Plugin.php:359
 msgid "Annual Report"
 msgstr ""
 
-#: src/Plugin.php:329
+#: src/Plugin.php:360
 msgid "Meeting Minutes"
 msgstr ""
 
-#: src/Plugin.php:339
+#: src/Plugin.php:370
 msgid "Common Property Maintenance"
 msgstr ""
 
-#: src/Plugin.php:340
+#: src/Plugin.php:371
 msgid "Current Repair"
 msgstr ""
 
-#: src/Plugin.php:341
+#: src/Plugin.php:372
 msgid "Capital Repair"
 msgstr ""
 
-#: src/Plugin.php:342
+#: src/Plugin.php:373
 msgid "Emergency Works"
 msgstr ""
 
-#: templates/archive-mkd_object.php:68
+#: templates/archive-mkd_object.php:70
 msgid "No properties found."
 msgstr ""
 
@@ -563,14 +762,188 @@ msgid_plural "%s floors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/single-mkd_object.php:88
+#: templates/single-mkd_object.php:93
+msgid "Apartments"
+msgstr ""
+
+#: templates/single-mkd_object.php:94
+msgid "Total Area"
+msgstr ""
+
+#: templates/single-mkd_object.php:96
+msgid "Tariff"
+msgstr ""
+
+#: templates/single-mkd_object.php:97
+msgid "Wear"
+msgstr ""
+
+#: templates/single-mkd_object.php:143
+msgid "Home"
+msgstr ""
+
+#. translators: %s: date
+#: templates/single-mkd_object.php:162
+#, php-format
+msgid "In management since %s"
+msgstr ""
+
+#: templates/single-mkd_object.php:209
+msgid "Building Facade"
+msgstr ""
+
+#: templates/single-mkd_object.php:225
+#: templates/single-mkd_object.php:229
+msgid "Entrance"
+msgstr ""
+
+#. translators: %s: tariff amount with unit
+#: templates/single-mkd_object.php:251
+#, php-format
+msgid "Tariff Breakdown — %s"
+msgstr ""
+
+#. translators: %s: meeting date
+#: templates/single-mkd_object.php:268
+#, php-format
+msgid "Approved at general meeting on %s"
+msgstr ""
+
+#. translators: %s: protocol number
+#: templates/single-mkd_object.php:274
+#, php-format
+msgid "protocol № %s"
+msgstr ""
+
+#: templates/single-mkd_object.php:297
+msgid "Total"
+msgstr ""
+
+#: templates/single-mkd_object.php:298
+msgid "per month"
+msgstr ""
+
+#: templates/single-mkd_object.php:311
+msgid "ASSIGNED TEAM"
+msgstr ""
+
+#: templates/single-mkd_object.php:330
+msgid "Building Dispatcher"
+msgstr ""
+
+#: templates/single-mkd_object.php:354
+msgid "Completed Works & Plans"
+msgstr ""
+
+#: templates/single-mkd_object.php:358
+#: templates/single-mkd_object.php:384
+msgid "Completed"
+msgstr ""
+
+#: templates/single-mkd_object.php:361
+#: templates/single-mkd_object.php:384
+msgid "Planned"
+msgstr ""
+
+#: templates/single-mkd_object.php:368
+msgid "Filter by year"
+msgstr ""
+
+#: templates/single-mkd_object.php:369
+msgid "Filter by month"
+msgstr ""
+
+#: templates/single-mkd_object.php:422
+msgid "Full list of works for all management years — in annual reports in the"
+msgstr ""
+
+#: templates/single-mkd_object.php:424
+#: templates/single-mkd_object.php:426
+msgid "documents section"
+msgstr ""
+
+#: templates/single-mkd_object.php:448
 msgid "All types"
 msgstr ""
 
-#: templates/single-mkd_object.php:99
+#: templates/single-mkd_object.php:456
+#: templates/single-mkd_object.php:533
 msgid "All years"
 msgstr ""
 
-#: templates/single-mkd_object.php:116
-msgid "Events"
+#: templates/single-mkd_object.php:471
+msgid "What to Do in an Emergency"
+msgstr ""
+
+#: templates/single-mkd_object.php:501
+#: templates/single-mkd_object.php:511
+msgid "Building Documents"
+msgstr ""
+
+#: templates/single-mkd_object.php:534
+msgid "All months"
+msgstr ""
+
+#: templates/single-mkd_object.php:537
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "%d work"
+msgstr ""
+
+#: templates/single-mkd_object.php:538
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "%d works"
+msgstr ""
+
+#: templates/single-mkd_object.php:539
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "%d works"
+msgstr ""
+
+#: templates/single-mkd_object.php:542
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "%d work planned"
+msgstr ""
+
+#: templates/single-mkd_object.php:543
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "%d works planned"
+msgstr ""
+
+#: templates/single-mkd_object.php:544
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "%d works planned"
+msgstr ""
+
+#: templates/single-mkd_object.php:547
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "Show %d more work"
+msgstr ""
+
+#: templates/single-mkd_object.php:548
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "Show %d more works"
+msgstr ""
+
+#: templates/single-mkd_object.php:549
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "Show %d more works"
+msgstr ""
+
+#: templates/single-mkd_object.php:551
+msgctxt "thousands of roubles"
+msgid "k ₽"
+msgstr ""
+
+#: templates/single-mkd_object.php:552
+msgctxt "millions of roubles"
+msgid "M ₽"
 msgstr ""

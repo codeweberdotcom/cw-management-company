@@ -14,366 +14,748 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Domain: cw-management-company\n"
 
+#. Plugin Name of the plugin
+#: cw-management-company.php
 msgid "CW Management Company"
 msgstr "CW Управляющая компания"
 
+#. Description of the plugin
+#: cw-management-company.php
 msgid "Multi-apartment building objects, documents (work acts, annual reports, meeting minutes) and events for a management company website."
-msgstr "Объекты многоквартирных домов, документы (акты выполненных работ, годовые отчёты, протоколы собраний) и мероприятия для сайта управляющей компании."
+msgstr "Объекты МКД, документы (акты выполненных работ, годовые отчёты, протоколы собраний) и события для сайта управляющей компании."
 
+#. Author of the plugin
+#: cw-management-company.php
 msgid "CodeWeber"
 msgstr "CodeWeber"
 
+#: src/Admin/DocumentMetaboxes.php:19
 msgid "Document Details"
 msgstr "Данные документа"
 
+#: src/Admin/DocumentMetaboxes.php:48
+#: src/Admin/EventMetabox.php:18
+#: src/Plugin.php:170
 msgid "Property"
 msgstr "Объект"
 
+#: src/Admin/DocumentMetaboxes.php:51
 msgid "— select property —"
 msgstr "— выберите объект —"
 
+#: src/Admin/DocumentMetaboxes.php:62
 msgid "File"
 msgstr "Файл"
 
+#: src/Admin/DocumentMetaboxes.php:71
 msgid "Select file"
 msgstr "Выбрать файл"
 
+#: src/Admin/DocumentMetaboxes.php:75
+#: src/Admin/Metaboxes.php:477
 msgid "Remove"
 msgstr "Удалить"
 
+#: src/Admin/DocumentMetaboxes.php:82
 msgid "Date / Period"
 msgstr "Дата / период"
 
+#: src/Admin/DocumentMetaboxes.php:89
+#: src/Admin/Metaboxes.php:539
 msgid "Cost"
 msgstr "Стоимость"
 
+#: src/Admin/EventMetabox.php:40
 msgid "— Not linked —"
 msgstr "— Не привязано —"
 
+#: src/Admin/EventMetabox.php:48
 msgid "Link this event to a property — e.g. an owners meeting for a specific building."
 msgstr "Привяжите это мероприятие к объекту — например, собрание собственников конкретного дома."
 
+#: src/Admin/Metaboxes.php:18
+#: src/Admin/Metaboxes.php:188
 msgid "Address & Identification"
 msgstr "Адрес и идентификация"
 
+#: src/Admin/Metaboxes.php:26
+#: src/Admin/Metaboxes.php:192
 msgid "Technical Characteristics"
 msgstr "Технические характеристики"
 
+#: src/Admin/Metaboxes.php:34
+msgid "Location"
+msgstr "Расположение"
+
+#: src/Admin/Metaboxes.php:42
+#: src/Admin/Metaboxes.php:196
 msgid "Management"
 msgstr "Управление"
 
+#: src/Admin/Metaboxes.php:50
+msgid "Gallery (Yard & Entrance photos)"
+msgstr "Галерея (фото двора и подъезда)"
+
+#: src/Admin/Metaboxes.php:58
+#: templates/single-mkd_object.php:255
+msgid "Tariff Breakdown"
+msgstr "Структура тарифа"
+
+#: src/Admin/Metaboxes.php:66
+msgid "Works History"
+msgstr "История работ"
+
+#: src/Admin/Metaboxes.php:74
+msgid "Assigned Team"
+msgstr "Закреплённая команда"
+
+#: src/Admin/Metaboxes.php:82
+msgid "Emergency Card"
+msgstr "Карточка аварийных ситуаций"
+
+#: src/Admin/Metaboxes.php:96
 msgid "Address"
 msgstr "Адрес"
 
+#: src/Admin/Metaboxes.php:97
+msgid "City / District"
+msgstr "Город / район"
+
+#: src/Admin/Metaboxes.php:98
 msgid "Cadastral Number"
 msgstr "Кадастровый номер"
 
+#: src/Admin/Metaboxes.php:99
 msgid "GIS ZHKH Code"
 msgstr "Код ГИС ЖКХ"
 
+#: src/Admin/Metaboxes.php:105
+#: templates/single-mkd_object.php:77
 msgid "Panel"
 msgstr "Панельный"
 
+#: src/Admin/Metaboxes.php:106
+#: templates/single-mkd_object.php:78
 msgid "Brick"
 msgstr "Кирпичный"
 
+#: src/Admin/Metaboxes.php:107
+#: templates/single-mkd_object.php:79
 msgid "Monolith"
 msgstr "Монолитный"
 
+#: src/Admin/Metaboxes.php:108
+#: templates/single-mkd_object.php:80
 msgid "Block"
 msgstr "Блочный"
 
+#: src/Admin/Metaboxes.php:109
+#: templates/single-mkd_object.php:81
 msgid "Wood"
 msgstr "Деревянный"
 
+#: src/Admin/Metaboxes.php:110
+#: src/Plugin.php:361
+#: templates/single-mkd_object.php:82
 msgid "Other"
 msgstr "Другое"
 
+#: src/Admin/Metaboxes.php:113
+#: src/Admin/Metaboxes.php:118
 msgid "Central"
 msgstr "Централизованное"
 
+#: src/Admin/Metaboxes.php:114
 msgid "Autonomous"
 msgstr "Автономное"
 
+#: src/Admin/Metaboxes.php:115
+#: src/Admin/Metaboxes.php:120
+#: src/Admin/Metaboxes.php:125
 msgid "None"
 msgstr "Отсутствует"
 
+#: src/Admin/Metaboxes.php:119
 msgid "Bottled"
 msgstr "Баллонный газ"
 
+#: src/Admin/Metaboxes.php:123
 msgid "Natural"
 msgstr "Естественная"
 
+#: src/Admin/Metaboxes.php:124
 msgid "Supply & Exhaust"
 msgstr "Приточно-вытяжная"
 
+#: src/Admin/Metaboxes.php:129
+#: templates/single-mkd_object.php:90
 msgid "Year Built"
 msgstr "Год постройки"
 
+#: src/Admin/Metaboxes.php:130
 msgid "Wall Material"
 msgstr "Материал стен"
 
+#: src/Admin/Metaboxes.php:131
 msgid "Building Series"
 msgstr "Серия дома"
 
+#: src/Admin/Metaboxes.php:132
+#: templates/single-mkd_object.php:91
 msgid "Floors"
 msgstr "Этажность"
 
+#: src/Admin/Metaboxes.php:133
+#: templates/single-mkd_object.php:92
 msgid "Entrances"
 msgstr "Подъезды"
 
+#: src/Admin/Metaboxes.php:134
 msgid "Dwelling Units"
 msgstr "Жилые помещения"
 
+#: src/Admin/Metaboxes.php:135
 msgid "Non-Residential Units"
 msgstr "Нежилые помещения"
 
+#: src/Admin/Metaboxes.php:136
 msgid "Total Area, m²"
 msgstr "Общая площадь, м²"
 
+#: src/Admin/Metaboxes.php:137
 msgid "Living Area, m²"
 msgstr "Жилая площадь, м²"
 
+#: src/Admin/Metaboxes.php:138
 msgid "Common Property Area, m²"
 msgstr "Площадь общего имущества, м²"
 
+#: src/Admin/Metaboxes.php:139
 msgid "Land Plot Area, m²"
 msgstr "Площадь земельного участка, м²"
 
+#: src/Admin/Metaboxes.php:140
+#: templates/single-mkd_object.php:95
 msgid "Elevators"
 msgstr "Лифты"
 
+#: src/Admin/Metaboxes.php:141
 msgid "Garbage Chute"
 msgstr "Мусоропровод"
 
+#: src/Admin/Metaboxes.php:142
+msgid "Wear, %"
+msgstr "Износ, %"
+
+#: src/Admin/Metaboxes.php:143
 msgid "Heating"
 msgstr "Отопление"
 
+#: src/Admin/Metaboxes.php:144
 msgid "Hot Water Supply"
 msgstr "Горячее водоснабжение"
 
+#: src/Admin/Metaboxes.php:145
 msgid "Cold Water Supply"
 msgstr "Холодное водоснабжение"
 
+#: src/Admin/Metaboxes.php:146
 msgid "Sewage"
 msgstr "Водоотведение"
 
+#: src/Admin/Metaboxes.php:147
 msgid "Electricity Supply"
 msgstr "Электроснабжение"
 
+#: src/Admin/Metaboxes.php:148
 msgid "Gas Supply"
 msgstr "Газоснабжение"
 
+#: src/Admin/Metaboxes.php:149
 msgid "Ventilation"
 msgstr "Вентиляция"
 
+#: src/Admin/Metaboxes.php:155
 msgid "Management Contract Number"
 msgstr "Номер договора управления"
 
+#: src/Admin/Metaboxes.php:156
 msgid "Contract Date"
 msgstr "Дата договора"
 
+#: src/Admin/Metaboxes.php:157
 msgid "Contract Term"
 msgstr "Срок договора"
 
+#: src/Admin/Metaboxes.php:159
 msgid "Management Method"
 msgstr "Способ управления"
 
+#: src/Admin/Metaboxes.php:162
 msgid "Management Company"
 msgstr "Управляющая компания"
 
+#: src/Admin/Metaboxes.php:163
 msgid "Homeowners Association (HOA)"
 msgstr "Товарищество собственников жилья (ТСЖ)"
 
+#: src/Admin/Metaboxes.php:164
 msgid "Direct Management by Owners"
 msgstr "Непосредственное управление собственниками"
 
+#: src/Admin/Metaboxes.php:167
 msgid "Building Representative (Contact)"
 msgstr "Представитель дома (контакт)"
 
+#: src/Admin/Metaboxes.php:168
+msgid "General Meeting Protocol Number"
+msgstr "Номер протокола общего собрания"
+
+#: src/Admin/Metaboxes.php:169
+msgid "General Meeting Protocol Date"
+msgstr "Дата протокола общего собрания"
+
+#: src/Admin/Metaboxes.php:170
+msgid "Management Tariff, ₽/m²"
+msgstr "Тариф на управление, ₽/м²"
+
+#: src/Admin/Metaboxes.php:171
+msgid "Dispatcher Phone"
+msgstr "Телефон диспетчера"
+
+#: src/Admin/Metaboxes.php:172
+msgid "Reception Hours"
+msgstr "Часы приёма"
+
+#: src/Admin/Metaboxes.php:210
 msgid "Yes"
 msgstr "Да"
 
+#: src/Admin/Metaboxes.php:210
 msgid "No"
 msgstr "Нет"
 
-msgid "— not specified —"
-msgstr "— не указано —"
+#: src/Admin/Metaboxes.php:250
+msgid "Click on the map to set the property location, or use the search field."
+msgstr "Кликните по карте, чтобы указать местоположение объекта, или используйте поиск."
 
-msgid "Invalid property."
-msgstr "Некорректный объект."
+#: src/Admin/Metaboxes.php:255
+msgid "Search address..."
+msgstr "Поиск адреса..."
 
-msgid "No documents found."
-msgstr "Документы не найдены."
+#: src/Admin/Metaboxes.php:396
+msgid "Yandex API key is not set. Please configure it in Theme Options > API > Yandex API Key."
+msgstr "Ключ API Яндекс.Карт не задан. Настройте его в Theme Options > API > Yandex API Key."
 
-msgid "Download"
-msgstr "Скачать"
+#: src/Admin/Metaboxes.php:403
+msgid "Latitude"
+msgstr "Широта"
 
-msgid "Properties"
-msgstr "Объекты"
+#: src/Admin/Metaboxes.php:410
+msgid "Longitude"
+msgstr "Долгота"
 
-msgid "All Properties"
-msgstr "Все объекты"
+#: src/Admin/Metaboxes.php:417
+msgid "Zoom"
+msgstr "Масштаб"
 
-msgid "Add New"
-msgstr "Добавить"
+#: src/Admin/Metaboxes.php:424
+msgid "Address (from map)"
+msgstr "Адрес (по карте)"
 
-msgid "Add New Property"
-msgstr "Добавить объект"
+#: src/Admin/Metaboxes.php:438
+msgid "Featured Image = facade photo (set in the right sidebar). Here — two additional slots."
+msgstr "Изображение записи = фото фасада (задаётся в правой колонке). Здесь — два дополнительных слота."
 
-msgid "Edit Property"
-msgstr "Редактировать объект"
+#: src/Admin/Metaboxes.php:444
+#: templates/single-mkd_object.php:215
+#: templates/single-mkd_object.php:219
+msgid "Yard"
+msgstr "Двор"
 
-msgid "New Property"
-msgstr "Новый объект"
+#: src/Admin/Metaboxes.php:449
+msgid "Entrance / Lobby"
+msgstr "Подъезд / холл"
 
-msgid "View Property"
-msgstr "Просмотреть объект"
+#: src/Admin/Metaboxes.php:466
+msgid "No image"
+msgstr "Нет изображения"
 
-msgid "Search Properties"
-msgstr "Поиск объектов"
+#: src/Admin/Metaboxes.php:473
+msgid "Replace"
+msgstr "Заменить"
 
-msgid "No properties found"
-msgstr "Объекты не найдены"
+#: src/Admin/Metaboxes.php:473
+msgid "Select Image"
+msgstr "Выбрать изображение"
 
-msgid "No properties found in trash"
-msgstr "В корзине объектов не найдено"
+#: src/Admin/Metaboxes.php:493
+msgid "Tariff breakdown items shown on the single page. Name, rate (₽/m²), share (%)."
+msgstr "Составляющие тарифа, отображаемые на странице объекта. Наименование, ставка (₽/м²), доля (%)."
 
+#: src/Admin/Metaboxes.php:498
+#: src/Admin/Metaboxes.php:593
+msgid "Name"
+msgstr "Наименование"
+
+#: src/Admin/Metaboxes.php:499
+msgid "₽/m²"
+msgstr "₽/м²"
+
+#: src/Admin/Metaboxes.php:500
+msgid "%"
+msgstr "%"
+
+#: src/Admin/Metaboxes.php:516
+msgid "+ Add row"
+msgstr "+ Добавить строку"
+
+#: src/Admin/Metaboxes.php:530
+msgid "Works history: completed and planned. Displayed on the single page with tab/year/month filters."
+msgstr "История работ: выполненные и запланированные. Отображается на странице объекта с фильтрами по вкладкам, годам и месяцам."
+
+#: src/Admin/Metaboxes.php:535
+msgid "Type"
+msgstr "Тип"
+
+#: src/Admin/Metaboxes.php:536
+msgid "Date"
+msgstr "Дата"
+
+#: src/Admin/Metaboxes.php:537
+msgid "Title"
+msgstr "Название"
+
+#: src/Admin/Metaboxes.php:538
+msgid "Detail"
+msgstr "Описание"
+
+#: src/Admin/Metaboxes.php:540
+#: src/Plugin.php:215
+#: src/Plugin.php:218
 msgid "Status"
 msgstr "Статус"
 
+#: src/Admin/Metaboxes.php:541
+msgid "Status color"
+msgstr "Цвет статуса"
+
+#: src/Admin/Metaboxes.php:550
+msgid "Done"
+msgstr "Выполнено"
+
+#: src/Admin/Metaboxes.php:551
+msgid "Plan"
+msgstr "План"
+
+#: src/Admin/Metaboxes.php:562
+msgid "Green"
+msgstr "Зелёный"
+
+#: src/Admin/Metaboxes.php:563
+msgid "Amber"
+msgstr "Охристый"
+
+#: src/Admin/Metaboxes.php:564
+msgid "Grey"
+msgstr "Серый"
+
+#: src/Admin/Metaboxes.php:573
+msgid "+ Add work"
+msgstr "+ Добавить работу"
+
+#: src/Admin/Metaboxes.php:587
+msgid "Team members displayed in the contact card. Initials: up to 3 characters (e.g. \"АГ\", \"№2\")."
+msgstr "Участники команды, отображаемые в контактной карточке. Инициалы: до 3 символов (например, «АГ», «№2»)."
+
+#: src/Admin/Metaboxes.php:592
+msgid "Initials"
+msgstr "Инициалы"
+
+#: src/Admin/Metaboxes.php:594
+msgid "Role / Description"
+msgstr "Роль / описание"
+
+#: src/Admin/Metaboxes.php:610
+msgid "+ Add team member"
+msgstr "+ Добавить участника"
+
+#: src/Admin/Metaboxes.php:626
+msgid "Emergency card shown next to the documents section. Shows dispatcher phone and step-by-step instructions for common emergencies."
+msgstr "Карточка аварийных ситуаций рядом с разделом документов. Показывает телефон диспетчера и пошаговые инструкции для типовых аварий."
+
+#: src/Admin/Metaboxes.php:630
+msgid "Emergency Phone"
+msgstr "Аварийный телефон"
+
+#: src/Admin/Metaboxes.php:634
+msgid "Footer Note"
+msgstr "Примечание внизу"
+
+#: src/Admin/Metaboxes.php:637
+msgid "Small green note at the bottom, e.g. \"In case of gas smell — call 104 first...\""
+msgstr "Небольшая зелёная приписка внизу, например «При запахе газа — сначала 104…»"
+
+#: src/Admin/Metaboxes.php:641
+msgid "Emergency Situations"
+msgstr "Аварийные ситуации"
+
+#: src/Admin/Metaboxes.php:645
+msgid "Situation"
+msgstr "Ситуация"
+
+#: src/Admin/Metaboxes.php:646
+msgid "Instructions"
+msgstr "Инструкция"
+
+#: src/Admin/Metaboxes.php:661
+msgid "+ Add situation"
+msgstr "+ Добавить ситуацию"
+
+#: src/Admin/Metaboxes.php:679
+msgid "— not specified —"
+msgstr "— не указано —"
+
+#: src/Ajax/DocumentFilter.php:19
+msgid "Invalid property."
+msgstr "Некорректный объект."
+
+#: src/Documents.php:76
+msgid "No documents found."
+msgstr "Документы не найдены."
+
+#: src/Plugin.php:147
+msgid "View property"
+msgstr "Смотреть объект"
+
+#: src/Plugin.php:169
+#: src/Plugin.php:171
+#: src/Plugin.php:184
+#: templates/single-mkd_object.php:145
+msgid "Properties"
+msgstr "Объекты"
+
+#: src/Plugin.php:172
+msgid "All Properties"
+msgstr "Все объекты"
+
+#: src/Plugin.php:173
+#: src/Plugin.php:245
+msgid "Add New"
+msgstr "Добавить"
+
+#: src/Plugin.php:174
+msgid "Add New Property"
+msgstr "Добавить объект"
+
+#: src/Plugin.php:175
+msgid "Edit Property"
+msgstr "Редактировать объект"
+
+#: src/Plugin.php:176
+msgid "New Property"
+msgstr "Новый объект"
+
+#: src/Plugin.php:177
+msgid "View Property"
+msgstr "Просмотреть объект"
+
+#: src/Plugin.php:178
+msgid "Search Properties"
+msgstr "Поиск объектов"
+
+#: src/Plugin.php:179
+msgid "No properties found"
+msgstr "Объекты не найдены"
+
+#: src/Plugin.php:180
+msgid "No properties found in trash"
+msgstr "В корзине объектов не найдено"
+
+#: src/Plugin.php:217
 msgid "Statuses"
 msgstr "Статусы"
 
+#: src/Plugin.php:219
 msgid "All Statuses"
 msgstr "Все статусы"
 
+#: src/Plugin.php:220
 msgid "Add New Status"
 msgstr "Добавить статус"
 
+#: src/Plugin.php:221
 msgid "Edit Status"
 msgstr "Редактировать статус"
 
+#: src/Plugin.php:222
 msgid "New Status"
 msgstr "Новый статус"
 
+#: src/Plugin.php:223
 msgid "Search Statuses"
 msgstr "Поиск статусов"
 
+#: src/Plugin.php:224
 msgid "No statuses found"
 msgstr "Статусы не найдены"
 
+#: src/Plugin.php:241
+#: src/Plugin.php:243
+#: src/Plugin.php:255
 msgid "Documents"
 msgstr "Документы"
 
+#: src/Plugin.php:242
 msgid "Document"
 msgstr "Документ"
 
+#: src/Plugin.php:244
 msgid "All Documents"
 msgstr "Все документы"
 
+#: src/Plugin.php:246
 msgid "Add New Document"
 msgstr "Добавить документ"
 
+#: src/Plugin.php:247
 msgid "Edit Document"
 msgstr "Редактировать документ"
 
+#: src/Plugin.php:248
 msgid "New Document"
 msgstr "Новый документ"
 
+#: src/Plugin.php:249
 msgid "Search Documents"
 msgstr "Поиск документов"
 
+#: src/Plugin.php:250
+msgid "No documents found"
+msgstr "Документы не найдены"
+
+#: src/Plugin.php:251
 msgid "No documents found in trash"
 msgstr "В корзине документов не найдено"
 
+#: src/Plugin.php:286
+#: src/Plugin.php:289
 msgid "Document Type"
 msgstr "Тип документа"
 
+#: src/Plugin.php:288
 msgid "Document Types"
 msgstr "Типы документов"
 
+#: src/Plugin.php:290
 msgid "All Types"
 msgstr "Все типы"
 
+#: src/Plugin.php:291
 msgid "Add New Type"
 msgstr "Добавить тип"
 
+#: src/Plugin.php:292
 msgid "Edit Type"
 msgstr "Редактировать тип"
 
+#: src/Plugin.php:293
 msgid "New Type"
 msgstr "Новый тип"
 
+#: src/Plugin.php:294
 msgid "Search Types"
 msgstr "Поиск типов"
 
+#: src/Plugin.php:295
 msgid "No types found"
 msgstr "Типы не найдены"
 
+#: src/Plugin.php:311
+#: src/Plugin.php:314
 msgid "Work Category"
 msgstr "Категория работ"
 
+#: src/Plugin.php:313
 msgid "Work Categories"
 msgstr "Категории работ"
 
+#: src/Plugin.php:315
 msgid "All Categories"
 msgstr "Все категории"
 
+#: src/Plugin.php:316
 msgid "Add New Category"
 msgstr "Добавить категорию"
 
+#: src/Plugin.php:317
 msgid "Edit Category"
 msgstr "Редактировать категорию"
 
+#: src/Plugin.php:318
 msgid "New Category"
 msgstr "Новая категория"
 
+#: src/Plugin.php:319
 msgid "Search Categories"
 msgstr "Поиск категорий"
 
+#: src/Plugin.php:320
 msgid "No categories found"
 msgstr "Категории не найдены"
 
+#: src/Plugin.php:347
 msgid "In Management"
 msgstr "В управлении"
 
+#: src/Plugin.php:348
 msgid "Emergency"
 msgstr "Аварийный"
 
+#: src/Plugin.php:349
 msgid "Removed from Management"
 msgstr "Снят с управления"
 
+#: src/Plugin.php:358
 msgid "Work Act"
 msgstr "Акт выполненных работ"
 
+#: src/Plugin.php:359
 msgid "Annual Report"
 msgstr "Годовой отчёт"
 
+#: src/Plugin.php:360
 msgid "Meeting Minutes"
 msgstr "Протокол собрания"
 
+#: src/Plugin.php:370
 msgid "Common Property Maintenance"
 msgstr "Содержание общего имущества"
 
+#: src/Plugin.php:371
 msgid "Current Repair"
 msgstr "Текущий ремонт"
 
+#: src/Plugin.php:372
 msgid "Capital Repair"
 msgstr "Капитальный ремонт"
 
+#: src/Plugin.php:373
 msgid "Emergency Works"
 msgstr "Аварийные работы"
 
+#: templates/archive-mkd_object.php:70
 msgid "No properties found."
 msgstr "Объекты не найдены."
 
 #. translators: %s: year built
+#: templates/post-cards/mkd_object/card.php:71
 #, php-format
 msgid "Built %s"
 msgstr "Год постройки: %s"
 
 #. translators: %s: number of floors
+#: templates/post-cards/mkd_object/card.php:80
 #, php-format
 msgid "%s floor"
 msgid_plural "%s floors"
@@ -381,41 +763,188 @@ msgstr[0] "%s этаж"
 msgstr[1] "%s этажа"
 msgstr[2] "%s этажей"
 
+#: templates/single-mkd_object.php:93
+msgid "Apartments"
+msgstr "Квартиры"
+
+#: templates/single-mkd_object.php:94
+msgid "Total Area"
+msgstr "Площадь МКД"
+
+#: templates/single-mkd_object.php:96
+msgid "Tariff"
+msgstr "Тариф"
+
+#: templates/single-mkd_object.php:97
+msgid "Wear"
+msgstr "Износ"
+
+#: templates/single-mkd_object.php:143
+msgid "Home"
+msgstr "Главная"
+
+#. translators: %s: date
+#: templates/single-mkd_object.php:162
+#, php-format
+msgid "In management since %s"
+msgstr "В управлении с %s"
+
+#: templates/single-mkd_object.php:209
+msgid "Building Facade"
+msgstr "Фасад дома"
+
+#: templates/single-mkd_object.php:225
+#: templates/single-mkd_object.php:229
+msgid "Entrance"
+msgstr "Подъезд"
+
+#. translators: %s: tariff amount with unit
+#: templates/single-mkd_object.php:251
+#, php-format
+msgid "Tariff Breakdown — %s"
+msgstr "Из чего состоит тариф — %s"
+
+#. translators: %s: meeting date
+#: templates/single-mkd_object.php:268
+#, php-format
+msgid "Approved at general meeting on %s"
+msgstr "Утверждён общим собранием %s"
+
+#. translators: %s: protocol number
+#: templates/single-mkd_object.php:274
+#, php-format
+msgid "protocol № %s"
+msgstr "протокол № %s"
+
+#: templates/single-mkd_object.php:297
+msgid "Total"
+msgstr "Итого"
+
+#: templates/single-mkd_object.php:298
+msgid "per month"
+msgstr "в месяц"
+
+#: templates/single-mkd_object.php:311
+msgid "ASSIGNED TEAM"
+msgstr "ЗАКРЕПЛЁННАЯ КОМАНДА"
+
+#: templates/single-mkd_object.php:330
+msgid "Building Dispatcher"
+msgstr "Диспетчер дома"
+
+#: templates/single-mkd_object.php:354
+msgid "Completed Works & Plans"
+msgstr "Выполненные работы и планы"
+
+#: templates/single-mkd_object.php:358
+#: templates/single-mkd_object.php:384
+msgid "Completed"
+msgstr "Выполнено"
+
+#: templates/single-mkd_object.php:361
+#: templates/single-mkd_object.php:384
+msgid "Planned"
+msgstr "Запланировано"
+
+#: templates/single-mkd_object.php:368
+msgid "Filter by year"
+msgstr "Фильтр по году"
+
+#: templates/single-mkd_object.php:369
+msgid "Filter by month"
+msgstr "Фильтр по месяцу"
+
+#: templates/single-mkd_object.php:422
+msgid "Full list of works for all management years — in annual reports in the"
+msgstr "Полный перечень работ за все годы управления — в годовых отчётах в"
+
+#: templates/single-mkd_object.php:424
+#: templates/single-mkd_object.php:426
+msgid "documents section"
+msgstr "разделе документов"
+
+#: templates/single-mkd_object.php:448
 msgid "All types"
 msgstr "Все типы"
 
+#: templates/single-mkd_object.php:456
+#: templates/single-mkd_object.php:533
 msgid "All years"
 msgstr "Все годы"
 
-msgid "Events"
-msgstr "Мероприятия"
+#: templates/single-mkd_object.php:471
+msgid "What to Do in an Emergency"
+msgstr "Что делать при аварии"
 
-msgid "No documents found"
-msgstr "Документы не найдены"
+#: templates/single-mkd_object.php:501
+#: templates/single-mkd_object.php:511
+msgid "Building Documents"
+msgstr "Документы по дому"
 
-msgid "Location"
-msgstr "Расположение"
+#: templates/single-mkd_object.php:534
+msgid "All months"
+msgstr "Все месяцы"
 
-msgid "Click on the map to set the property location, or use the search field."
-msgstr "Кликните по карте, чтобы указать местоположение объекта, или используйте поиск."
+#: templates/single-mkd_object.php:537
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "%d work"
+msgstr "%d работа"
 
-msgid "Search address..."
-msgstr "Поиск адреса..."
+#: templates/single-mkd_object.php:538
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "%d works"
+msgstr "%d работы"
 
-msgid "Yandex API key is not set. Please configure it in Theme Options > API > Yandex API Key."
-msgstr "Ключ API Яндекс.Карт не задан. Настройте его в Theme Options > API > Yandex API Key."
+#: templates/single-mkd_object.php:539
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "%d works"
+msgstr "%d работ"
 
-msgid "Latitude"
-msgstr "Широта"
+#: templates/single-mkd_object.php:542
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "%d work planned"
+msgstr "%d работа запланирована"
 
-msgid "Longitude"
-msgstr "Долгота"
+#: templates/single-mkd_object.php:543
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "%d works planned"
+msgstr "%d работы запланированы"
 
-msgid "Zoom"
-msgstr "Масштаб"
+#: templates/single-mkd_object.php:544
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "%d works planned"
+msgstr "%d работ запланировано"
 
-msgid "Address (from map)"
-msgstr "Адрес (по карте)"
+#: templates/single-mkd_object.php:547
+#, php-format
+msgctxt "plural form for 1, 21, 31…"
+msgid "Show %d more work"
+msgstr "Показать ещё %d работу"
 
-msgid "View property"
-msgstr "Смотреть объект"
+#: templates/single-mkd_object.php:548
+#, php-format
+msgctxt "plural form for 2-4, 22-24…"
+msgid "Show %d more works"
+msgstr "Показать ещё %d работы"
+
+#: templates/single-mkd_object.php:549
+#, php-format
+msgctxt "plural form for 5-20, 25-30…"
+msgid "Show %d more works"
+msgstr "Показать ещё %d работ"
+
+#: templates/single-mkd_object.php:551
+msgctxt "thousands of roubles"
+msgid "k ₽"
+msgstr "тыс. ₽"
+
+#: templates/single-mkd_object.php:552
+msgctxt "millions of roubles"
+msgid "M ₽"
+msgstr "млн ₽"

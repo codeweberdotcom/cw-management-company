@@ -22,9 +22,8 @@ class DocumentFilter {
 		$type = sanitize_key( $_POST['type'] ?? '' );
 		$year = ( isset( $_POST['year'] ) && preg_match( '/^\d{4}$/', $_POST['year'] ) ) ? $_POST['year'] : '';
 
-		$docs   = Documents::query( $object_id, [ 'type' => $type, 'year' => $year ] );
-		$groups = Documents::group_by_type( $docs );
-		$html   = Documents::render_list( $groups );
+		$docs = Documents::query( $object_id, [ 'type' => $type, 'year' => $year ] );
+		$html = Documents::render_list( $docs );
 
 		wp_send_json_success( [
 			'html'  => $html,

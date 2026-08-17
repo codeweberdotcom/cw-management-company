@@ -36,26 +36,6 @@ class Documents {
 	}
 
 	/**
-	 * @param \WP_Post[] $docs
-	 * @return array<string, array{label:string, items:\WP_Post[]}>
-	 */
-	public static function group_by_type( array $docs ): array {
-		$groups = [];
-		foreach ( $docs as $doc ) {
-			$terms = get_the_terms( $doc->ID, 'mkd_document_type' );
-			$term  = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0] : null;
-			$key   = $term ? $term->slug : 'other';
-			$label = $term ? $term->name : esc_html__( 'Other', 'cw-management-company' );
-
-			if ( ! isset( $groups[ $key ] ) ) {
-				$groups[ $key ] = [ 'label' => $label, 'items' => [] ];
-			}
-			$groups[ $key ]['items'][] = $doc;
-		}
-		return $groups;
-	}
-
-	/**
 	 * Distinct years among a property's documents, newest first.
 	 *
 	 * @return string[]
@@ -85,45 +65,42 @@ class Documents {
 	}
 
 	/**
-	 * @param array<string, array{label:string, items:\WP_Post[]}> $groups
+	 * Flat list of document rows: format badge, title, date.
+	 *
+	 * @param \WP_Post[] $docs
 	 */
-	public static function render_list( array $groups ): string {
+	public static function render_list( array $docs ): string {
 		ob_start();
 
-		if ( ! $groups ) {
-			echo '<p class="text-muted">' . esc_html__( 'No documents found.', 'cw-management-company' ) . '</p>';
+		if ( ! $docs ) {
+			echo '<p class="cw-mc-docs-empty">' . esc_html__( 'No documents found.', 'cw-management-company' ) . '</p>';
+			return ob_get_clean();
 		}
-
-		foreach ( $groups as $group ) :
-			?>
-			<div class="mb-5">
-				<h3 class="h6 text-uppercase text-muted mb-3"><?php echo esc_html( $group['label'] ); ?></h3>
-				<ul class="list-unstyled mb-0">
-					<?php foreach ( $group['items'] as $doc ) :
-						$file_id  = (int) get_post_meta( $doc->ID, '_mkd_document_file', true );
-						$file_url = $file_id ? wp_get_attachment_url( $file_id ) : '';
-						$date     = get_post_meta( $doc->ID, '_mkd_document_date', true );
-						?>
-						<li class="d-flex justify-content-between align-items-center border-bottom py-2 gap-3">
-							<span>
-								<?php echo esc_html( get_the_title( $doc ) ); ?>
-								<?php if ( $date ) : ?>
-									<span class="text-muted small ms-2">
-										<?php echo esc_html( mysql2date( get_option( 'date_format' ), $date ) ); ?>
-									</span>
-								<?php endif; ?>
-							</span>
-							<?php if ( $file_url ) : ?>
-							<a href="<?php echo esc_url( $file_url ); ?>" class="btn btn-sm btn-outline-primary flex-shrink-0">
-								<?php esc_html_e( 'Download', 'cw-management-company' ); ?>
-							</a>
-							<?php endif; ?>
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			</div>
-			<?php
-		endforeach;
+		?>
+		<div class="cw-mc-docs-list">
+			<?php foreach ( $docs as $doc ) :
+				$file_id  = (int) get_post_meta( $doc->ID, '_mkd_document_file', true );
+				$file_url = $file_id ? wp_get_attachment_url( $file_id ) : '';
+				$ext      = $file_url ? strtoupper( pathinfo( (string) wp_parse_url( $file_url, PHP_URL_PATH ), PATHINFO_EXTENSION ) ) : '';
+				$date     = get_post_meta( $doc->ID, '_mkd_document_date', true );
+				$tag      = $file_url ? 'a' : 'div';
+				?>
+				<<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput ?> class="cw-mc-doc-row"<?php
+					if ( $file_url ) {
+						printf( ' href="%s" download', esc_url( $file_url ) );
+					}
+				?>>
+					<?php if ( $ext ) : ?>
+					<span class="cw-mc-doc-row__ext"><?php echo esc_html( $ext ); ?></span>
+					<?php endif; ?>
+					<span class="cw-mc-doc-row__name"><?php echo esc_html( get_the_title( $doc ) ); ?></span>
+					<?php if ( $date ) : ?>
+					<span class="cw-mc-doc-row__meta"><?php echo esc_html( mysql2date( 'd.m.Y', $date ) ); ?></span>
+					<?php endif; ?>
+				</<?php echo $tag; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
+			<?php endforeach; ?>
+		</div>
+		<?php
 
 		return ob_get_clean();
 	}

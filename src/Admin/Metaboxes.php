@@ -165,6 +165,8 @@ class Metaboxes {
 				],
 			],
 			'_mkd_responsible_person' => [ 'label' => __( 'Building Representative (Contact)', 'cw-management-company' ), 'type' => 'text' ],
+			'_mkd_protocol_number'    => [ 'label' => __( 'General Meeting Protocol Number', 'cw-management-company' ), 'type' => 'text' ],
+			'_mkd_protocol_date'      => [ 'label' => __( 'General Meeting Protocol Date', 'cw-management-company' ), 'type' => 'date' ],
 			'_mkd_tariff'             => [ 'label' => __( 'Management Tariff, ₽/m²', 'cw-management-company' ), 'type' => 'decimal' ],
 			'_mkd_phone'              => [ 'label' => __( 'Dispatcher Phone', 'cw-management-company' ), 'type' => 'text' ],
 			'_mkd_reception_hours'    => [ 'label' => __( 'Reception Hours', 'cw-management-company' ), 'type' => 'text' ],
@@ -536,6 +538,7 @@ class Metaboxes {
 					<th><?php esc_html_e( 'Detail', 'cw-management-company' ); ?></th>
 					<th style="width:110px;"><?php esc_html_e( 'Cost', 'cw-management-company' ); ?></th>
 					<th style="width:100px;"><?php esc_html_e( 'Status', 'cw-management-company' ); ?></th>
+					<th style="width:110px;"><?php esc_html_e( 'Status color', 'cw-management-company' ); ?></th>
 					<th style="width:40px;"></th>
 				</tr>
 			</thead>
@@ -553,6 +556,14 @@ class Metaboxes {
 					<td><input type="text" class="widefat wk-detail" value="<?php echo esc_attr( $w['detail'] ?? '' ); ?>"></td>
 					<td><input type="text" class="widefat wk-cost" placeholder="100 000 ₽" value="<?php echo esc_attr( $w['cost'] ?? '' ); ?>"></td>
 					<td><input type="text" class="widefat wk-status" placeholder="Выполнено" value="<?php echo esc_attr( $w['status'] ?? '' ); ?>"></td>
+					<td>
+						<?php $tone = $w['tone'] ?? ( 'plan' === ( $w['type'] ?? '' ) ? 'warning' : 'accent' ); ?>
+						<select class="wk-tone">
+							<option value="accent"  <?php selected( $tone, 'accent' ); ?>><?php esc_html_e( 'Green', 'cw-management-company' ); ?></option>
+							<option value="warning" <?php selected( $tone, 'warning' ); ?>><?php esc_html_e( 'Amber', 'cw-management-company' ); ?></option>
+							<option value="muted"   <?php selected( $tone, 'muted' ); ?>><?php esc_html_e( 'Grey', 'cw-management-company' ); ?></option>
+						</select>
+					</td>
 					<td><button type="button" class="button cw-mc-row-remove" title="Remove">✕</button></td>
 				</tr>
 				<?php endforeach; ?>
@@ -828,12 +839,16 @@ class Metaboxes {
 			$data = json_decode( $json, true );
 			if ( is_array( $data ) ) {
 				$allowed_types = [ 'done', 'plan' ];
+				$allowed_tones = [ 'accent', 'warning', 'muted' ];
 				$clean = [];
 				foreach ( $data as $w ) {
 					if ( ! is_array( $w ) ) {
 						continue;
 					}
 					$type = in_array( $w['type'] ?? '', $allowed_types, true ) ? $w['type'] : 'done';
+					$tone = in_array( $w['tone'] ?? '', $allowed_tones, true )
+						? $w['tone']
+						: ( 'plan' === $type ? 'warning' : 'accent' );
 					$clean[] = [
 						'type'   => $type,
 						'date'   => sanitize_text_field( $w['date'] ?? '' ),
@@ -841,6 +856,7 @@ class Metaboxes {
 						'detail' => sanitize_text_field( $w['detail'] ?? '' ),
 						'cost'   => sanitize_text_field( $w['cost'] ?? '' ),
 						'status' => sanitize_text_field( $w['status'] ?? '' ),
+						'tone'   => $tone,
 					];
 				}
 				update_post_meta( $post_id, '_mkd_works', wp_json_encode( $clean ) );

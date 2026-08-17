@@ -26,6 +26,7 @@
 				detail: tr.querySelector('.wk-detail').value,
 				cost:   tr.querySelector('.wk-cost').value,
 				status: tr.querySelector('.wk-status').value,
+				tone:   tr.querySelector('.wk-tone').value,
 			});
 		});
 		document.getElementById('cw-mc-works-json').value = JSON.stringify(rows);
@@ -84,6 +85,11 @@
 				'<td><input type="text" class="widefat wk-detail"></td>' +
 				'<td><input type="text" class="widefat wk-cost" placeholder="100 000 ₽"></td>' +
 				'<td><input type="text" class="widefat wk-status" placeholder="Выполнено"></td>' +
+				'<td><select class="wk-tone">' +
+					'<option value="accent">Green</option>' +
+					'<option value="warning">Amber</option>' +
+					'<option value="muted">Grey</option>' +
+				'</select></td>' +
 				'<td><button type="button" class="button cw-mc-row-remove" title="Remove">✕</button></td>';
 			tbody.appendChild(tr);
 		}
