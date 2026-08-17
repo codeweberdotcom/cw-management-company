@@ -45,6 +45,30 @@ class Metaboxes {
 			'normal',
 			'default'
 		);
+		add_meta_box(
+			'cw_mc_gallery',
+			esc_html__( 'Gallery (Yard & Entrance photos)', 'cw-management-company' ),
+			[ $this, 'render_gallery' ],
+			'mkd_object',
+			'normal',
+			'default'
+		);
+		add_meta_box(
+			'cw_mc_tariff_rows',
+			esc_html__( 'Tariff Breakdown', 'cw-management-company' ),
+			[ $this, 'render_tariff_rows' ],
+			'mkd_object',
+			'normal',
+			'default'
+		);
+		add_meta_box(
+			'cw_mc_works',
+			esc_html__( 'Works History', 'cw-management-company' ),
+			[ $this, 'render_works' ],
+			'mkd_object',
+			'normal',
+			'default'
+		);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────
@@ -54,6 +78,7 @@ class Metaboxes {
 	private function address_fields(): array {
 		return [
 			'_mkd_address'          => [ 'label' => __( 'Address', 'cw-management-company' ), 'type' => 'text' ],
+			'_mkd_city'             => [ 'label' => __( 'City / District', 'cw-management-company' ), 'type' => 'text' ],
 			'_mkd_cadastral_number' => [ 'label' => __( 'Cadastral Number', 'cw-management-company' ), 'type' => 'text' ],
 			'_mkd_gis_code'         => [ 'label' => __( 'GIS ZHKH Code', 'cw-management-company' ), 'type' => 'text' ],
 		];
@@ -98,6 +123,7 @@ class Metaboxes {
 			'_mkd_land_area'       => [ 'label' => __( 'Land Plot Area, m²', 'cw-management-company' ), 'type' => 'decimal' ],
 			'_mkd_elevators_count' => [ 'label' => __( 'Elevators', 'cw-management-company' ), 'type' => 'number' ],
 			'_mkd_garbage_chute'   => [ 'label' => __( 'Garbage Chute', 'cw-management-company' ), 'type' => 'checkbox' ],
+			'_mkd_wear_pct'        => [ 'label' => __( 'Wear, %', 'cw-management-company' ), 'type' => 'number' ],
 			'_mkd_heating_type'    => [ 'label' => __( 'Heating', 'cw-management-company' ), 'type' => 'select', 'options' => $supply_options ],
 			'_mkd_hot_water'       => [ 'label' => __( 'Hot Water Supply', 'cw-management-company' ), 'type' => 'select', 'options' => $supply_options ],
 			'_mkd_cold_water'      => [ 'label' => __( 'Cold Water Supply', 'cw-management-company' ), 'type' => 'select', 'options' => $supply_options ],
@@ -123,6 +149,9 @@ class Metaboxes {
 				],
 			],
 			'_mkd_responsible_person' => [ 'label' => __( 'Building Representative (Contact)', 'cw-management-company' ), 'type' => 'text' ],
+			'_mkd_tariff'             => [ 'label' => __( 'Management Tariff, ₽/m²', 'cw-management-company' ), 'type' => 'decimal' ],
+			'_mkd_phone'              => [ 'label' => __( 'Dispatcher Phone', 'cw-management-company' ), 'type' => 'text' ],
+			'_mkd_reception_hours'    => [ 'label' => __( 'Reception Hours', 'cw-management-company' ), 'type' => 'text' ],
 		];
 	}
 
@@ -131,8 +160,7 @@ class Metaboxes {
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────
-	// Public accessors — reused by frontend templates so field labels/options
-	// stay in sync with the admin metaboxes (single source of truth).
+	// Public accessors
 	// ─────────────────────────────────────────────────────────────────────────
 
 	public static function field_groups(): array {
@@ -384,6 +412,143 @@ class Metaboxes {
 		<?php
 	}
 
+	public function render_gallery( \WP_Post $post ): void {
+		$yard     = (int) get_post_meta( $post->ID, '_mkd_photo_yard', true );
+		$entrance = (int) get_post_meta( $post->ID, '_mkd_photo_entrance', true );
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Featured Image = facade photo (set in the right sidebar). Here — two additional slots.', 'cw-management-company' ); ?>
+		</p>
+		<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+			<?php
+			$this->render_media_slot(
+				'_mkd_photo_yard',
+				esc_html__( 'Yard', 'cw-management-company' ),
+				$yard
+			);
+			$this->render_media_slot(
+				'_mkd_photo_entrance',
+				esc_html__( 'Entrance / Lobby', 'cw-management-company' ),
+				$entrance
+			);
+			?>
+		</div>
+		<?php
+	}
+
+	private function render_media_slot( string $key, string $label, int $attachment_id ): void {
+		$preview = $attachment_id ? wp_get_attachment_image_url( $attachment_id, 'medium' ) : '';
+		?>
+		<div class="cw-mc-media-slot" data-key="<?php echo esc_attr( $key ); ?>">
+			<strong style="display:block;margin-bottom:6px;"><?php echo esc_html( $label ); ?></strong>
+			<div class="cw-mc-media-preview" style="margin-bottom:8px;min-height:80px;background:#f0f0f1;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+				<?php if ( $preview ) : ?>
+					<img src="<?php echo esc_url( $preview ); ?>" style="max-width:100%;max-height:160px;display:block;">
+				<?php else : ?>
+					<span style="color:#aaa;font-size:13px;"><?php esc_html_e( 'No image', 'cw-management-company' ); ?></span>
+				<?php endif; ?>
+			</div>
+			<input type="hidden" name="<?php echo esc_attr( $key ); ?>" class="cw-mc-media-id"
+				value="<?php echo esc_attr( $attachment_id ?: '' ); ?>">
+			<div style="display:flex;gap:8px;">
+				<button type="button" class="button cw-mc-media-select">
+					<?php echo $attachment_id ? esc_html__( 'Replace', 'cw-management-company' ) : esc_html__( 'Select Image', 'cw-management-company' ); ?>
+				</button>
+				<?php if ( $attachment_id ) : ?>
+				<button type="button" class="button cw-mc-media-remove">
+					<?php esc_html_e( 'Remove', 'cw-management-company' ); ?>
+				</button>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	public function render_tariff_rows( \WP_Post $post ): void {
+		$raw  = get_post_meta( $post->ID, '_mkd_tariff_rows', true );
+		$rows = $raw ? json_decode( $raw, true ) : [];
+		if ( ! is_array( $rows ) ) {
+			$rows = [];
+		}
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Tariff breakdown items shown on the single page. Name, rate (₽/m²), share (%).', 'cw-management-company' ); ?>
+		</p>
+		<table class="cw-mc-repeater widefat" id="cw-mc-tariff-table" style="margin-bottom:10px;">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Name', 'cw-management-company' ); ?></th>
+					<th style="width:110px;"><?php esc_html_e( '₽/m²', 'cw-management-company' ); ?></th>
+					<th style="width:80px;"><?php esc_html_e( '%', 'cw-management-company' ); ?></th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody id="cw-mc-tariff-rows">
+				<?php foreach ( $rows as $row ) : ?>
+				<tr class="cw-mc-tariff-row">
+					<td><input type="text" class="widefat tr-name" value="<?php echo esc_attr( $row['name'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat tr-val" value="<?php echo esc_attr( $row['val'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat tr-pct" value="<?php echo esc_attr( $row['pct'] ?? '' ); ?>"></td>
+					<td><button type="button" class="button cw-mc-row-remove" title="Remove">✕</button></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<button type="button" class="button" id="cw-mc-tariff-add">
+			<?php esc_html_e( '+ Add row', 'cw-management-company' ); ?>
+		</button>
+		<input type="hidden" name="_mkd_tariff_rows" id="cw-mc-tariff-json" value="<?php echo esc_attr( $raw ?: '[]' ); ?>">
+		<?php
+	}
+
+	public function render_works( \WP_Post $post ): void {
+		$raw   = get_post_meta( $post->ID, '_mkd_works', true );
+		$works = $raw ? json_decode( $raw, true ) : [];
+		if ( ! is_array( $works ) ) {
+			$works = [];
+		}
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Works history: completed and planned. Displayed on the single page with tab/year/month filters.', 'cw-management-company' ); ?>
+		</p>
+		<table class="cw-mc-repeater widefat" id="cw-mc-works-table" style="margin-bottom:10px;">
+			<thead>
+				<tr>
+					<th style="width:90px;"><?php esc_html_e( 'Type', 'cw-management-company' ); ?></th>
+					<th style="width:130px;"><?php esc_html_e( 'Date', 'cw-management-company' ); ?></th>
+					<th><?php esc_html_e( 'Title', 'cw-management-company' ); ?></th>
+					<th><?php esc_html_e( 'Detail', 'cw-management-company' ); ?></th>
+					<th style="width:110px;"><?php esc_html_e( 'Cost', 'cw-management-company' ); ?></th>
+					<th style="width:100px;"><?php esc_html_e( 'Status', 'cw-management-company' ); ?></th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody id="cw-mc-works-rows">
+				<?php foreach ( $works as $w ) : ?>
+				<tr class="cw-mc-work-row">
+					<td>
+						<select class="wk-type">
+							<option value="done" <?php selected( $w['type'] ?? '', 'done' ); ?>><?php esc_html_e( 'Done', 'cw-management-company' ); ?></option>
+							<option value="plan" <?php selected( $w['type'] ?? '', 'plan' ); ?>><?php esc_html_e( 'Plan', 'cw-management-company' ); ?></option>
+						</select>
+					</td>
+					<td><input type="text" class="widefat wk-date" placeholder="июль 2026" value="<?php echo esc_attr( $w['date'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat wk-title" value="<?php echo esc_attr( $w['title'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat wk-detail" value="<?php echo esc_attr( $w['detail'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat wk-cost" placeholder="100 000 ₽" value="<?php echo esc_attr( $w['cost'] ?? '' ); ?>"></td>
+					<td><input type="text" class="widefat wk-status" placeholder="Выполнено" value="<?php echo esc_attr( $w['status'] ?? '' ); ?>"></td>
+					<td><button type="button" class="button cw-mc-row-remove" title="Remove">✕</button></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<button type="button" class="button" id="cw-mc-works-add">
+			<?php esc_html_e( '+ Add work', 'cw-management-company' ); ?>
+		</button>
+		<input type="hidden" name="_mkd_works" id="cw-mc-works-json" value="<?php echo esc_attr( $raw ?: '[]' ); ?>">
+		<?php
+	}
+
 	private function render_fields( int $post_id, array $fields ): void {
 		echo '<table class="form-table" role="presentation"><tbody>';
 
@@ -520,6 +685,61 @@ class Metaboxes {
 				update_post_meta( $post_id, $key, $raw );
 			} else {
 				delete_post_meta( $post_id, $key );
+			}
+		}
+
+		// Gallery attachment IDs.
+		foreach ( [ '_mkd_photo_yard', '_mkd_photo_entrance' ] as $key ) {
+			$raw = isset( $_POST[ $key ] ) ? absint( $_POST[ $key ] ) : 0;
+			if ( $raw > 0 ) {
+				update_post_meta( $post_id, $key, $raw );
+			} else {
+				delete_post_meta( $post_id, $key );
+			}
+		}
+
+		// Tariff rows JSON.
+		if ( isset( $_POST['_mkd_tariff_rows'] ) ) {
+			$json = wp_unslash( $_POST['_mkd_tariff_rows'] );
+			$data = json_decode( $json, true );
+			if ( is_array( $data ) ) {
+				$clean = [];
+				foreach ( $data as $row ) {
+					if ( ! is_array( $row ) ) {
+						continue;
+					}
+					$clean[] = [
+						'name' => sanitize_text_field( $row['name'] ?? '' ),
+						'val'  => sanitize_text_field( $row['val'] ?? '' ),
+						'pct'  => sanitize_text_field( $row['pct'] ?? '' ),
+					];
+				}
+				update_post_meta( $post_id, '_mkd_tariff_rows', wp_json_encode( $clean ) );
+			}
+		}
+
+		// Works JSON.
+		if ( isset( $_POST['_mkd_works'] ) ) {
+			$json = wp_unslash( $_POST['_mkd_works'] );
+			$data = json_decode( $json, true );
+			if ( is_array( $data ) ) {
+				$allowed_types = [ 'done', 'plan' ];
+				$clean = [];
+				foreach ( $data as $w ) {
+					if ( ! is_array( $w ) ) {
+						continue;
+					}
+					$type = in_array( $w['type'] ?? '', $allowed_types, true ) ? $w['type'] : 'done';
+					$clean[] = [
+						'type'   => $type,
+						'date'   => sanitize_text_field( $w['date'] ?? '' ),
+						'title'  => sanitize_text_field( $w['title'] ?? '' ),
+						'detail' => sanitize_text_field( $w['detail'] ?? '' ),
+						'cost'   => sanitize_text_field( $w['cost'] ?? '' ),
+						'status' => sanitize_text_field( $w['status'] ?? '' ),
+					];
+				}
+				update_post_meta( $post_id, '_mkd_works', wp_json_encode( $clean ) );
 			}
 		}
 	}

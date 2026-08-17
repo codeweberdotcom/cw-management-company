@@ -15,11 +15,35 @@ class Plugin {
 		add_action( 'after_setup_theme', [ $this, 'register_card_templates' ] );
 		add_filter( 'codeweber_post_type_template_map', [ $this, 'register_card_template_map' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_document_filter' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_metabox_scripts' ] );
 
 		( new Admin\Metaboxes() )->init();
 		( new Admin\DocumentMetaboxes() )->init();
 		( new Admin\EventMetabox() )->init();
 		( new Ajax\DocumentFilter() )->init();
+	}
+
+	// ─────────────────────────────────────────────────────────────────────────
+	// Admin scripts (metaboxes JS, media picker, repeaters)
+	// ─────────────────────────────────────────────────────────────────────────
+
+	public function enqueue_metabox_scripts( string $hook ): void {
+		global $post;
+		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) {
+			return;
+		}
+		if ( ! $post || 'mkd_object' !== $post->post_type ) {
+			return;
+		}
+
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'cw-mc-metaboxes',
+			CW_MC_URL . 'assets/js/metaboxes.js',
+			[],
+			CW_MC_VERSION,
+			true
+		);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────
