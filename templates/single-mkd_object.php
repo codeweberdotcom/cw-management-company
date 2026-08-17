@@ -207,9 +207,7 @@ while ( have_posts() ) :
 							<div class="cw-mc-tariff-row__val">
 								<?php if ( ! empty( $trow['val'] ) ) echo esc_html( $trow['val'] ) . ' ₽'; ?>
 							</div>
-							<div class="cw-mc-tariff-row__track">
-								<div class="cw-mc-tariff-row__fill" style="--w:<?php echo esc_attr( $pct ); ?>%"></div>
-							</div>
+							<div class="progressbar line primary" data-value="<?php echo esc_attr( $pct ); ?>"></div>
 						</div>
 						<?php endforeach; ?>
 						<div class="cw-mc-tariff-total">
