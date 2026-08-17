@@ -123,9 +123,17 @@ while ( have_posts() ) :
 	rsort( $work_years_list );
 	$work_months_list = array_values( array_filter( $months_order, static fn( $m ) => isset( $work_months_found[ $m ] ) ) );
 
+	// ── Emergency card ────────────────────────────────────────────────────────
+	$emergency_phone = get_post_meta( $post_id, '_mkd_emergency_phone', true );
+	$emergency_note  = get_post_meta( $post_id, '_mkd_emergency_note', true );
+	$emergency_raw   = get_post_meta( $post_id, '_mkd_emergency_items', true );
+	$emergency_items = $emergency_raw ? json_decode( $emergency_raw, true ) : [];
+	if ( ! is_array( $emergency_items ) ) { $emergency_items = []; }
+
 	// ── Section visibility ────────────────────────────────────────────────────
-	$show_tariff  = (bool) ( $tariff || $tariff_rows_clean );
-	$show_contact = (bool) ( $phone || $reception_hours || $team_members );
+	$show_tariff    = (bool) ( $tariff || $tariff_rows_clean );
+	$show_contact   = (bool) ( $phone || $reception_hours || $team_members );
+	$show_emergency = (bool) ( $emergency_phone || $emergency_items );
 	?>
 
 <div class="cw-mc-page">
@@ -436,36 +444,93 @@ while ( have_posts() ) :
 	</section>
 	<?php endif; ?>
 
-	<?php /* ════════════════════════════════════════ 4. DOCUMENTS */ ?>
-	<?php if ( $documents_by_type || $document_years ) : ?>
+	<?php /* ════════════════════════════════════════ 4. DOCUMENTS + EMERGENCY */ ?>
+	<?php if ( $documents_by_type || $document_years || $show_emergency ) : ?>
 	<section class="cw-mc-s" id="docs">
 		<div class="cw-mc-wrap">
+			<?php
+			$has_docs     = (bool) ( $documents_by_type || $document_years );
+			$use_2col     = $has_docs && $show_emergency;
+
+			$render_doc_filter = static function () use ( $document_type_terms, $document_years ) {
+				if ( ( $document_type_terms && ! is_wp_error( $document_type_terms ) && count( $document_type_terms ) > 1 ) || count( $document_years ) > 1 ) {
+					?>
+					<form id="cw-mc-document-filter" class="cw-mc-doc-filter">
+						<?php if ( $document_type_terms && ! is_wp_error( $document_type_terms ) ) : ?>
+						<select name="type" class="cw-mc-select">
+							<option value=""><?php esc_html_e( 'All types', 'cw-management-company' ); ?></option>
+							<?php foreach ( $document_type_terms as $type_term ) : ?>
+							<option value="<?php echo esc_attr( $type_term->slug ); ?>"><?php echo esc_html( $type_term->name ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<?php endif; ?>
+						<?php if ( $document_years ) : ?>
+						<select name="year" class="cw-mc-select">
+							<option value=""><?php esc_html_e( 'All years', 'cw-management-company' ); ?></option>
+							<?php foreach ( $document_years as $year ) : ?>
+							<option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<?php endif; ?>
+					</form>
+					<?php
+				}
+			};
+
+			$render_emergency_card = static function () use ( $emergency_phone, $emergency_items, $emergency_note ) {
+				?>
+				<div class="cw-mc-emergency-card">
+					<div class="cw-mc-emergency-card__header">
+						<h3 class="cw-mc-emergency-card__title"><?php esc_html_e( 'What to Do in an Emergency', 'cw-management-company' ); ?></h3>
+						<?php if ( $emergency_phone ) : ?>
+						<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $emergency_phone ) ); ?>" class="cw-mc-emergency-card__phone">
+							<?php echo esc_html( $emergency_phone ); ?>
+						</a>
+						<?php endif; ?>
+					</div>
+					<?php if ( $emergency_items ) : ?>
+					<div class="cw-mc-emergency-list">
+						<?php foreach ( $emergency_items as $item ) : ?>
+						<div class="cw-mc-emergency-item">
+							<div class="cw-mc-emergency-item__title"><?php echo esc_html( $item['title'] ?? '' ); ?></div>
+							<?php if ( ! empty( $item['desc'] ) ) : ?>
+							<div class="cw-mc-emergency-item__desc"><?php echo nl2br( esc_html( $item['desc'] ) ); ?></div>
+							<?php endif; ?>
+						</div>
+						<?php endforeach; ?>
+					</div>
+					<?php endif; ?>
+					<?php if ( $emergency_note ) : ?>
+					<div class="cw-mc-emergency-card__note"><?php echo esc_html( $emergency_note ); ?></div>
+					<?php endif; ?>
+				</div>
+				<?php
+			};
+			?>
+
+			<?php if ( $use_2col ) : ?>
+			<div class="cw-mc-docs-grid">
+				<div>
+					<h2 class="cw-mc-h2 mb-4"><?php esc_html_e( 'Documents', 'cw-management-company' ); ?></h2>
+					<?php $render_doc_filter(); ?>
+					<div id="cw-mc-documents-list">
+						<?php echo Documents::render_list( $documents_by_type ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					</div>
+				</div>
+				<div><?php $render_emergency_card(); ?></div>
+			</div>
+
+			<?php elseif ( $has_docs ) : ?>
 			<h2 class="cw-mc-h2 mb-5"><?php esc_html_e( 'Documents', 'cw-management-company' ); ?></h2>
-
-			<?php if ( ( $document_type_terms && ! is_wp_error( $document_type_terms ) && count( $document_type_terms ) > 1 ) || count( $document_years ) > 1 ) : ?>
-			<form id="cw-mc-document-filter" class="cw-mc-doc-filter">
-				<?php if ( $document_type_terms && ! is_wp_error( $document_type_terms ) ) : ?>
-				<select name="type" class="cw-mc-select">
-					<option value=""><?php esc_html_e( 'All types', 'cw-management-company' ); ?></option>
-					<?php foreach ( $document_type_terms as $type_term ) : ?>
-					<option value="<?php echo esc_attr( $type_term->slug ); ?>"><?php echo esc_html( $type_term->name ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<?php endif; ?>
-				<?php if ( $document_years ) : ?>
-				<select name="year" class="cw-mc-select">
-					<option value=""><?php esc_html_e( 'All years', 'cw-management-company' ); ?></option>
-					<?php foreach ( $document_years as $year ) : ?>
-					<option value="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<?php endif; ?>
-			</form>
-			<?php endif; ?>
-
+			<?php $render_doc_filter(); ?>
 			<div id="cw-mc-documents-list">
 				<?php echo Documents::render_list( $documents_by_type ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
+
+			<?php else : ?>
+			<?php $render_emergency_card(); ?>
+			<?php endif; ?>
+
 		</div>
 	</section>
 	<?php endif; ?>

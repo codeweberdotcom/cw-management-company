@@ -103,6 +103,50 @@
 		tbody.addEventListener('change', serializeWorks);
 	}
 
+	// ── Emergency situations table ───────────────────────────────────────────────
+
+	function serializeEmergency() {
+		var rows = [];
+		document.querySelectorAll('#cw-mc-emergency-rows .cw-mc-emergency-row').forEach(function (tr) {
+			rows.push({
+				title: tr.querySelector('.em-title').value,
+				desc:  tr.querySelector('.em-desc').value,
+			});
+		});
+		var jsonField = document.getElementById('cw-mc-emergency-json');
+		if (jsonField) jsonField.value = JSON.stringify(rows);
+	}
+
+	function initEmergency() {
+		var tbody  = document.getElementById('cw-mc-emergency-rows');
+		var addBtn = document.getElementById('cw-mc-emergency-add');
+		if (!tbody || !addBtn) return;
+
+		function newEmergencyRow() {
+			var tr = document.createElement('tr');
+			tr.className = 'cw-mc-emergency-row';
+			tr.innerHTML =
+				'<td><input type="text" class="widefat em-title"></td>' +
+				'<td><textarea class="widefat em-desc" rows="2"></textarea></td>' +
+				'<td><button type="button" class="button cw-mc-row-remove" title="Remove">&#x2715;</button></td>';
+			tbody.appendChild(tr);
+		}
+
+		addBtn.addEventListener('click', function () {
+			newEmergencyRow();
+		});
+
+		tbody.addEventListener('click', function (e) {
+			if (e.target.classList.contains('cw-mc-row-remove')) {
+				e.target.closest('tr').remove();
+				serializeEmergency();
+			}
+		});
+
+		tbody.addEventListener('input',  serializeEmergency);
+		tbody.addEventListener('change', serializeEmergency);
+	}
+
 	// ── Team members table ───────────────────────────────────────────────────────
 
 	function serializeTeam() {
@@ -207,6 +251,7 @@
 			serializeTariff();
 			serializeWorks();
 			serializeTeam();
+			serializeEmergency();
 		});
 	}
 
@@ -216,6 +261,7 @@
 		initTariff();
 		initWorks();
 		initTeam();
+		initEmergency();
 		initGallery();
 	});
 })();

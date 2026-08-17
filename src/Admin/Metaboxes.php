@@ -77,6 +77,14 @@ class Metaboxes {
 			'normal',
 			'default'
 		);
+		add_meta_box(
+			'cw_mc_emergency',
+			esc_html__( 'Emergency Card', 'cw-management-company' ),
+			[ $this, 'render_emergency' ],
+			'mkd_object',
+			'normal',
+			'default'
+		);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────
@@ -594,6 +602,57 @@ class Metaboxes {
 		<?php
 	}
 
+	public function render_emergency( \WP_Post $post ): void {
+		$phone = get_post_meta( $post->ID, '_mkd_emergency_phone', true );
+		$note  = get_post_meta( $post->ID, '_mkd_emergency_note', true );
+		$raw   = get_post_meta( $post->ID, '_mkd_emergency_items', true );
+		$items = $raw ? json_decode( $raw, true ) : [];
+		if ( ! is_array( $items ) ) {
+			$items = [];
+		}
+		?>
+		<p class="description" style="margin-bottom:12px;">
+			<?php esc_html_e( 'Emergency card shown next to the documents section. Shows dispatcher phone and step-by-step instructions for common emergencies.', 'cw-management-company' ); ?>
+		</p>
+		<table class="form-table" role="presentation"><tbody>
+			<tr>
+				<th><label for="_mkd_emergency_phone"><?php esc_html_e( 'Emergency Phone', 'cw-management-company' ); ?></label></th>
+				<td><input type="text" id="_mkd_emergency_phone" name="_mkd_emergency_phone" value="<?php echo esc_attr( $phone ); ?>" class="regular-text" placeholder="+7 495 123-45-99"></td>
+			</tr>
+			<tr>
+				<th><label for="_mkd_emergency_note"><?php esc_html_e( 'Footer Note', 'cw-management-company' ); ?></label></th>
+				<td>
+					<input type="text" id="_mkd_emergency_note" name="_mkd_emergency_note" value="<?php echo esc_attr( $note ); ?>" class="regular-text">
+					<p class="description"><?php esc_html_e( 'Small green note at the bottom, e.g. "In case of gas smell — call 104 first..."', 'cw-management-company' ); ?></p>
+				</td>
+			</tr>
+		</tbody></table>
+		<h4 style="margin:16px 0 8px;"><?php esc_html_e( 'Emergency Situations', 'cw-management-company' ); ?></h4>
+		<table class="cw-mc-repeater widefat" style="margin-bottom:10px;">
+			<thead>
+				<tr>
+					<th style="width:200px;"><?php esc_html_e( 'Situation', 'cw-management-company' ); ?></th>
+					<th><?php esc_html_e( 'Instructions', 'cw-management-company' ); ?></th>
+					<th style="width:40px;"></th>
+				</tr>
+			</thead>
+			<tbody id="cw-mc-emergency-rows">
+				<?php foreach ( $items as $item ) : ?>
+				<tr class="cw-mc-emergency-row">
+					<td><input type="text" class="widefat em-title" value="<?php echo esc_attr( $item['title'] ?? '' ); ?>"></td>
+					<td><textarea class="widefat em-desc" rows="2"><?php echo esc_textarea( $item['desc'] ?? '' ); ?></textarea></td>
+					<td><button type="button" class="button cw-mc-row-remove" title="Remove">&#x2715;</button></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<button type="button" class="button" id="cw-mc-emergency-add">
+			<?php esc_html_e( '+ Add situation', 'cw-management-company' ); ?>
+		</button>
+		<input type="hidden" name="_mkd_emergency_items" id="cw-mc-emergency-json" value="<?php echo esc_attr( $raw ?: '[]' ); ?>">
+		<?php
+	}
+
 	private function render_fields( int $post_id, array $fields ): void {
 		echo '<table class="form-table" role="presentation"><tbody>';
 
@@ -785,6 +844,38 @@ class Metaboxes {
 					];
 				}
 				update_post_meta( $post_id, '_mkd_works', wp_json_encode( $clean ) );
+			}
+		}
+
+		// Emergency phone and note.
+		foreach ( [ '_mkd_emergency_phone', '_mkd_emergency_note' ] as $key ) {
+			$raw = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( (string) $_POST[ $key ] ) ) : '';
+			if ( '' !== $raw ) {
+				update_post_meta( $post_id, $key, $raw );
+			} else {
+				delete_post_meta( $post_id, $key );
+			}
+		}
+
+		// Emergency items JSON.
+		if ( isset( $_POST['_mkd_emergency_items'] ) ) {
+			$json = wp_unslash( $_POST['_mkd_emergency_items'] );
+			$data = json_decode( $json, true );
+			if ( is_array( $data ) ) {
+				$clean = [];
+				foreach ( $data as $item ) {
+					if ( ! is_array( $item ) ) continue;
+					if ( '' === trim( $item['title'] ?? '' ) ) continue;
+					$clean[] = [
+						'title' => sanitize_text_field( $item['title'] ?? '' ),
+						'desc'  => sanitize_textarea_field( $item['desc'] ?? '' ),
+					];
+				}
+				if ( $clean ) {
+					update_post_meta( $post_id, '_mkd_emergency_items', wp_json_encode( $clean ) );
+				} else {
+					delete_post_meta( $post_id, '_mkd_emergency_items' );
+				}
 			}
 		}
 
